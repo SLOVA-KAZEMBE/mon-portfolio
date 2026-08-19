@@ -1,8 +1,6 @@
 import os
-from urllib.parse import quote_plus
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,37 +8,16 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
 
-import json
-from models import db, Admin, Project, Skill, Message, Experience, Service, Profile, Article
-from admin import admin_bp
+# Import de tes modèles
+from models import db
 
-# Récupération stricte de l'URL globale
-_db_uri = os.environ.get("DATABASE_URI")
-
-if _db_uri:
-    # Nettoyage et forçage du protocole PostgreSQL + driver
-    if _db_uri.startswith("postgres://"):
-        _db_uri = _db_uri.replace("postgres://", "postgresql+psycopg2://", 1)
-    elif _db_uri.startswith("postgresql://"):
-        _db_uri = _db_uri.replace("postgresql://", "postgresql+psycopg2://", 1)
-else:
-    # Uniquement utilisé en local si DATABASE_URI n'est pas définie
-    _db_user = os.environ.get("DB_USER", "postgres")
-    _db_password = quote_plus(os.environ.get("DB_PASSWORD", ""))
-    _db_host = os.environ.get("DB_HOST", "localhost")
-    _db_port = os.environ.get("DB_PORT", "5432")
-    _db_name = os.environ.get("DB_NAME", "postgres")
-    _db_uri = f"postgresql+psycopg2://{_db_user}:{_db_password}@{_db_host}:{_db_port}/{_db_name}"
-
-# Élimination définitive des chaînes vides qui font planter le parseur de SQLAlchemy
-if "@:" in _db_uri or ".com:/" in _db_uri:
-    _db_uri = _db_uri.replace(":6543", "").replace(":5432", "")
-
-app.config['SQLALCHEMY_DATABASE_URI'] = _db_uri
+# On récupère directement l'URL propre de Vercel
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 db.init_app(app)
+
 
 
 
