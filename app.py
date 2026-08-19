@@ -14,31 +14,34 @@ import json
 from models import db, Admin, Project, Skill, Message, Experience, Service, Profile, Article
 from admin import admin_bp
 
-# 1. On récupère la variable
+# Récupération stricte de l'URL globale
 _db_uri = os.environ.get("DATABASE_URI")
 
-# 2. Si elle existe, on s'assure qu'elle commence par postgresql+psycopg2://
 if _db_uri:
+    # Nettoyage et forçage du protocole PostgreSQL + driver
     if _db_uri.startswith("postgres://"):
         _db_uri = _db_uri.replace("postgres://", "postgresql+psycopg2://", 1)
     elif _db_uri.startswith("postgresql://"):
         _db_uri = _db_uri.replace("postgresql://", "postgresql+psycopg2://", 1)
-
-# 3. Si DATABASE_URI n'est pas fournie, on reconstruit l'URL avec les variables séparées
 else:
+    # Uniquement utilisé en local si DATABASE_URI n'est pas définie
     _db_user = os.environ.get("DB_USER", "postgres")
     _db_password = quote_plus(os.environ.get("DB_PASSWORD", ""))
     _db_host = os.environ.get("DB_HOST", "localhost")
     _db_port = os.environ.get("DB_PORT", "5432")
     _db_name = os.environ.get("DB_NAME", "postgres")
-    # On ajoute +psycopg2 ici aussi par sécurité
     _db_uri = f"postgresql+psycopg2://{_db_user}:{_db_password}@{_db_host}:{_db_port}/{_db_name}"
+
+# Élimination définitive des chaînes vides qui font planter le parseur de SQLAlchemy
+if "@:" in _db_uri or ".com:/" in _db_uri:
+    _db_uri = _db_uri.replace(":6543", "").replace(":5432", "")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = _db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 db.init_app(app)
+
 
 
 login_manager = LoginManager()
