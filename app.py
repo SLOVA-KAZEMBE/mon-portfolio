@@ -1,4 +1,5 @@
 import os
+from urllib.parse import quote_plus
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -13,11 +14,23 @@ import json
 from models import db, Admin, Project, Skill, Message, Experience, Service, Profile, Article
 from admin import admin_bp
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI", "sqlite:///portfolio.db")
+# Construction de l'URL de la base de données à partir de variables séparées
+# pour éviter les problèmes d'encodage avec les mots de passe qui contiennent @
+_db_uri = os.environ.get("DATABASE_URI")
+if not _db_uri:
+    _db_user = os.environ.get("DB_USER", "postgres")
+    _db_password = quote_plus(os.environ.get("DB_PASSWORD", ""))
+    _db_host = os.environ.get("DB_HOST", "localhost")
+    _db_port = os.environ.get("DB_PORT", "5432")
+    _db_name = os.environ.get("DB_NAME", "postgres")
+    _db_uri = f"postgresql://{_db_user}:{_db_password}@{_db_host}:{_db_port}/{_db_name}"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = _db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 db.init_app(app)
+
 
 login_manager = LoginManager()
 login_manager.login_view = 'admin.login'
