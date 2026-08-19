@@ -1,22 +1,39 @@
 import os
-from flask import Flask
+from urllib.parse import quote_plus
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
+app.secret_key = os.environ.get("SECRET_KEY") or "dev-secret-key-change-in-production"
 
-# Import de tes modèles
-from models import db
+import json
+from models import db, Admin, Project, Skill, Message, Experience, Service, Profile, Article
+from admin import admin_bp
 
-# On récupère directement l'URL propre de Vercel
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI")
+# -------------------------------------------------------------------
+# Construction robuste de l'URL de base de données
+# On utilise 'or' au lieu du 2ème arg de .get() pour gérer
+# les cas où Vercel stocke la variable comme chaîne vide ""
+# -------------------------------------------------------------------
+_db_uri = os.environ.get("DATABASE_URI") or None
+if not _db_uri:
+    _db_user     = os.environ.get("DB_USER")     or "postgres"
+    _db_password = quote_plus(os.environ.get("DB_PASSWORD") or "")
+    _db_host     = os.environ.get("DB_HOST")     or "localhost"
+    _db_port     = os.environ.get("DB_PORT")     or "5432"
+    _db_name     = os.environ.get("DB_NAME")     or "postgres"
+    _db_uri = f"postgresql://{_db_user}:{_db_password}@{_db_host}:{_db_port}/{_db_name}"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = _db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 db.init_app(app)
+
 
 
 
