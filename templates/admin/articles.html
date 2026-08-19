@@ -1,0 +1,60 @@
+{% extends "admin/layout.html" %}
+
+{% block page_title %}Articles / Phrases{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>Tous les articles et phrases</h2>
+    <a href="{{ url_for('admin.add_article') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nouveau contenu</a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Titre</th>
+        <th>Catégorie</th>
+        <th>Statut</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for article in articles %}
+      <tr>
+        <td style="color: var(--admin-muted);">#{{ article.id }}</td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            {% if article.image %}
+            <img src="{{ url_for('static', filename=article.image) }}" style="width: 48px; height: 32px; border-radius: 4px; object-fit: cover;">
+            {% else %}
+            <div style="width: 48px; height: 32px; border-radius: 4px; background: var(--admin-bg); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--admin-muted);">N/A</div>
+            {% endif %}
+            <div style="font-weight: 500;">{{ article.title }}</div>
+          </div>
+        </td>
+        <td><span style="background: rgba(139, 92, 246, 0.1); color: var(--admin-accent); padding: 2px 8px; border-radius: 12px; font-size: 11px;">{{ article.category }}</span></td>
+        <td>
+          <span class="status-dot {% if article.status == 'Publié' %}success{% else %}warning{% endif %}"></span>
+          <span style="font-size: 13px;">{{ article.status }}</span>
+        </td>
+        <td style="font-size: 12px; color: var(--admin-muted);">{{ article.created_at.strftime('%Y-%m-%d') if article.created_at else '' }}</td>
+        <td>
+          <div style="display: flex; gap: 8px;">
+            <a href="{{ url_for('admin.edit_article', id=article.id) }}" class="btn" style="padding: 6px 10px; border: 1px solid var(--admin-border);"><i class="fa-solid fa-pen"></i></a>
+            <form action="{{ url_for('admin.delete_article', id=article.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ceci ?');">
+              <button type="submit" class="btn btn-danger" style="padding: 6px 10px;"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      {% if not articles %}
+      <tr>
+        <td colspan="6" style="text-align: center; color: var(--admin-muted); padding: 24px;">Aucun article trouvé.</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

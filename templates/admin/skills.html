@@ -1,0 +1,71 @@
+{% extends "admin/layout.html" %}
+
+{% block page_title %}Compétences{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+  
+  <div class="card">
+    <div class="card-header">
+      <h2>Compétences Techniques</h2>
+    </div>
+    <div style="padding: 24px;">
+      <ul style="margin-bottom: 24px;">
+        {% for skill in tech_skills %}
+        <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--admin-border);">
+          <div>
+            <div style="font-weight: 500;">{{ skill.name }}</div>
+            <div style="font-size: 12px; color: var(--admin-muted); margin-top: 4px;">{{ skill.level }}%</div>
+            <div style="width: 150px; height: 4px; background: var(--admin-border); border-radius: 4px; margin-top: 6px; overflow: hidden;">
+              <div style="width: {{ skill.level }}%; height: 100%; background: var(--admin-accent);"></div>
+            </div>
+          </div>
+          <form action="{{ url_for('admin.delete_skill', id=skill.id) }}" method="POST" onsubmit="return confirm('Supprimer ?');">
+            <button class="btn" style="color: var(--admin-danger); background: transparent; padding: 4px;"><i class="fa-solid fa-times"></i></button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Ajouter une compétence</h2>
+    </div>
+    <div style="padding: 24px;">
+      <form method="POST">
+        <div class="form-group">
+          <label>Type de compétence</label>
+          <select name="type" class="form-control" required>
+            <option value="tech">Technique (avec pourcentage)</option>
+            <option value="tool">Outil (nom uniquement)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nom de la compétence</label>
+          <input type="text" name="name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Niveau (%) - Laissez 0 pour un outil</label>
+          <input type="number" name="level" class="form-control" value="80" min="0" max="100" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-plus"></i> Ajouter</button>
+      </form>
+      
+      <h3 style="margin-top: 32px; font-size: 14px; color: var(--admin-muted);">Outils & Environnement</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+        {% for tool in tool_skills %}
+        <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); padding: 4px 12px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+          {{ tool.name }}
+          <form action="{{ url_for('admin.delete_skill', id=tool.id) }}" method="POST" style="display: inline;">
+            <button type="submit" style="background: none; border: none; color: var(--admin-danger); cursor: pointer;"><i class="fa-solid fa-times"></i></button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

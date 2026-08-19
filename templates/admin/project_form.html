@@ -1,0 +1,74 @@
+{% extends "admin/layout.html" %}
+
+{% block page_title %}{% if project %}Modifier le projet{% else %}Ajouter un projet{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+  <div class="card-header">
+    <h2>{% if project %}Modifier {{ project.title }}{% else %}Nouveau projet{% endif %}</h2>
+    <a href="{{ url_for('admin.projects') }}" class="btn" style="border: 1px solid var(--admin-border);"><i class="fa-solid fa-arrow-left"></i> Retour</a>
+  </div>
+  <div style="padding: 24px;">
+    <form method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>Titre du projet</label>
+        <input type="text" name="title" class="form-control" value="{{ project.title if project else '' }}" required>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select name="category" class="form-control" required>
+            <option value="Web App" {% if project and project.category == 'Web App' %}selected{% endif %}>Web App</option>
+            <option value="Landing Page" {% if project and project.category == 'Landing Page' %}selected{% endif %}>Landing Page</option>
+            <option value="UI/UX" {% if project and project.category == 'UI/UX' %}selected{% endif %}>UI/UX</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Statut</label>
+          <select name="status" class="form-control" required>
+            <option value="Publié" {% if project and project.status == 'Publié' %}selected{% endif %}>Publié</option>
+            <option value="Brouillon" {% if project and project.status == 'Brouillon' %}selected{% endif %}>Brouillon</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea name="description" class="form-control" rows="4" required>{{ project.description if project else '' }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Tags (séparés par des virgules)</label>
+        <input type="text" name="tags" class="form-control" value="{{ project.tags if project else '' }}" placeholder="Ex: React, Tailwind CSS, Firebase">
+      </div>
+
+      <div class="form-group">
+        <label>Lien du projet (Optionnel)</label>
+        <input type="url" name="link" class="form-control" value="{{ project.link if project else '' }}" placeholder="https://monprojet.com">
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <label>Couleur du Thumbnail (1 à 6)</label>
+          <input type="number" name="color" class="form-control" value="{{ project.color if project else '1' }}" min="1" max="6" required>
+        </div>
+        <div class="form-group">
+          <label>Image du projet (Optionnel)</label>
+          <input type="file" name="image" class="form-control" accept="image/*">
+          {% if project and project.image %}
+          <div style="margin-top: 10px;">
+            <span style="font-size: 12px; color: var(--admin-muted);">Image actuelle :</span><br>
+            <img src="{{ url_for('static', filename=project.image) }}" style="max-height: 100px; border-radius: 4px; margin-top: 4px;">
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div style="margin-top: 30px; display: flex; justify-content: flex-end;">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "admin/layout.html" %}
+
+{% block page_title %}Expériences{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+  
+  <div class="card">
+    <div class="card-header">
+      <h2>Liste des expériences</h2>
+    </div>
+    <div style="padding: 24px;">
+      <ul style="margin-bottom: 24px;">
+        {% for exp in experiences %}
+        <li style="display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid var(--admin-border);">
+          <div>
+            <div style="font-weight: bold; color: var(--admin-accent);">{{ exp.period }}</div>
+            <div style="font-size: 16px; margin-top: 4px; font-weight: 500;">{{ exp.role }}</div>
+            <div style="font-size: 13px; color: var(--admin-muted); margin-top: 2px;">{{ exp.company }}</div>
+            <div style="font-size: 14px; margin-top: 8px; line-height: 1.5; color: #a1a1aa;">{{ exp.description }}</div>
+          </div>
+          <form action="{{ url_for('admin.delete_experience', id=exp.id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette expérience ?');">
+            <button class="btn" style="color: var(--admin-danger); background: transparent; padding: 4px;"><i class="fa-solid fa-trash"></i></button>
+          </form>
+        </li>
+        {% endfor %}
+        {% if not experiences %}
+        <li style="color: var(--admin-muted);">Aucune expérience trouvée.</li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Ajouter une expérience</h2>
+    </div>
+    <div style="padding: 24px;">
+      <form method="POST">
+        <div class="form-group">
+          <label>Période (ex: 2024 - Présent)</label>
+          <input type="text" name="period" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Rôle / Titre</label>
+          <input type="text" name="role" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Entreprise / École</label>
+          <input type="text" name="company" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Description détaillée</label>
+          <textarea name="description" class="form-control" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-plus"></i> Ajouter</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>DevFolio Admin</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  {% if current_user.is_authenticated %}
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span style="color:var(--admin-accent); font-weight: 800;">&lt;/&gt;</span> 
+      <div>
+        Slova Kazembe<br>
+        <span style="color:var(--admin-muted); font-size: 11px; font-weight: normal;">Admin</span>
+      </div>
+    </div>
+    <div class="sidebar-menu">
+      <div class="menu-group">
+        <a href="{{ url_for('admin.dashboard') }}" class="menu-item {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+          <i class="fa-solid fa-house"></i> Tableau de bord
+        </a>
+      </div>
+      <div class="menu-group">
+        <div class="menu-label">CONTENU</div>
+        <a href="{{ url_for('admin.profile_settings') }}" class="menu-item {% if 'profile' in request.endpoint %}active{% endif %}"><i class="fa-regular fa-user"></i> À propos (Profil)</a>
+        <a href="{{ url_for('admin.skills') }}" class="menu-item {% if 'skills' in request.endpoint %}active{% endif %}">
+          <i class="fa-solid fa-code"></i> Compétences
+        </a>
+        <a href="{{ url_for('admin.projects') }}" class="menu-item {% if 'projects' in request.endpoint %}active{% endif %}">
+          <i class="fa-regular fa-folder-open"></i> Projets
+        </a>
+        <a href="{{ url_for('admin.experiences') }}" class="menu-item {% if 'experiences' in request.endpoint %}active{% endif %}"><i class="fa-solid fa-briefcase"></i> Expériences</a>
+        <a href="{{ url_for('admin.articles') }}" class="menu-item {% if 'articles' in request.endpoint %}active{% endif %}"><i class="fa-regular fa-newspaper"></i> Articles / Phrases</a>
+        <a href="#" class="menu-item"><i class="fa-regular fa-comment-dots"></i> Témoignages</a>
+        <a href="{{ url_for('admin.services') }}" class="menu-item {% if 'services' in request.endpoint %}active{% endif %}"><i class="fa-solid fa-concierge-bell"></i> Services</a>
+        <a href="#" class="menu-item"><i class="fa-solid fa-certificate"></i> Certifications</a>
+      </div>
+      <div class="menu-group">
+        <div class="menu-label">GESTION</div>
+        <a href="{{ url_for('admin.messages') }}" class="menu-item {% if 'messages' in request.endpoint %}active{% endif %}">
+          <i class="fa-regular fa-envelope"></i> Messages
+          {% if unread_messages > 0 %}<span class="menu-badge">{{ unread_messages }}</span>{% endif %}
+        </a>
+        <a href="#" class="menu-item"><i class="fa-solid fa-users"></i> Abonnés</a>
+        <a href="#" class="menu-item"><i class="fa-solid fa-handshake"></i> Partenaires</a>
+        <a href="#" class="menu-item"><i class="fa-regular fa-images"></i> Fichiers / Médias</a>
+      </div>
+      <div class="menu-group">
+        <div class="menu-label">APPARENCE</div>
+        <a href="#" class="menu-item"><i class="fa-solid fa-paint-roller"></i> Thèmes</a>
+        <a href="#" class="menu-item"><i class="fa-solid fa-sliders"></i> Personnalisation</a>
+        <a href="#" class="menu-item"><i class="fa-solid fa-bars"></i> Menus</a>
+        <a href="#" class="menu-item"><i class="fa-regular fa-file-lines"></i> Pages</a>
+      </div>
+      <div class="menu-group">
+        <div class="menu-label">PARAMÈTRES</div>
+        <a href="#" class="menu-item"><i class="fa-solid fa-gear"></i> Général</a>
+        <a href="#" class="menu-item"><i class="fa-solid fa-magnifying-glass"></i> SEO</a>
+        <a href="#" class="menu-item"><i class="fa-solid fa-share-nodes"></i> Réseaux sociaux</a>
+        <a href="#" class="menu-item"><i class="fa-solid fa-user-shield"></i> Utilisateurs</a>
+      </div>
+    </div>
+    <div style="padding: 24px; border-top: 1px solid var(--admin-border);">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+        <img src="https://ui-avatars.com/api/?name=Slova+Kazembe&background=random" style="width: 32px; border-radius: 50%;">
+        <div style="font-size: 13px;">
+          <strong>Slova Kazembe</strong><br>
+          <span style="color:var(--admin-muted);">Admin</span>
+        </div>
+      </div>
+      <a href="{{ url_for('admin.logout') }}" class="menu-item" style="color: var(--admin-danger); padding: 0;">
+        <span class="status-dot success" style="margin-left: 4px;"></span> En ligne 
+        <i class="fa-solid fa-sign-out-alt" style="margin-left: auto; margin-right: 0;"></i>
+      </a>
+    </div>
+  </aside>
+  {% endif %}
+
+  <main class="main-content">
+    {% if current_user.is_authenticated %}
+    <header class="topbar">
+      <div class="topbar-title">{% block page_title %}{% endblock %}</div>
+      <div class="topbar-actions">
+        <div style="background: var(--admin-card); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--admin-border); display: flex; align-items: center; gap: 8px; font-size: 13px; margin-right: 16px;">
+          <i class="fa-solid fa-search" style="color: var(--admin-muted);"></i>
+          <input type="text" placeholder="Rechercher..." style="background: transparent; border: none; color: white; outline: none; width: 120px;">
+          <span style="background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; font-size: 10px; color: var(--admin-muted);">⌘K</span>
+        </div>
+        <a href="{{ url_for('admin.messages') }}" style="position: relative; color: var(--admin-text); margin-right: 16px;">
+          <i class="fa-regular fa-bell" style="font-size: 18px;"></i>
+          {% if unread_messages > 0 %}<span style="position: absolute; top: -5px; right: -5px; background: var(--admin-accent); color: white; border-radius: 50%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-weight: bold;">{{ unread_messages }}</span>{% endif %}
+        </a>
+        <a href="#" style="color: var(--admin-text); margin-right: 24px;">
+          <i class="fa-regular fa-moon" style="font-size: 18px;"></i>
+        </a>
+        <div style="display: flex; align-items: center; gap: 10px; border-left: 1px solid var(--admin-border); padding-left: 24px;">
+          <img src="https://ui-avatars.com/api/?name=Slova+Kazembe&background=232736&color=fff" style="width: 32px; border-radius: 50%;">
+          <div style="font-size: 13px; line-height: 1.2;">
+            <strong>Slova Kazembe</strong><br>
+            <span style="color:var(--admin-muted); font-size: 11px;">Admin</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    {% endif %}
+
+    <div class="content-area">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</body>
+</html>

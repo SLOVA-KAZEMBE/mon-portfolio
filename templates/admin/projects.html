@@ -1,0 +1,55 @@
+{% extends "admin/layout.html" %}
+
+{% block page_title %}Projets{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>Tous les projets</h2>
+    <a href="{{ url_for('admin.add_project') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nouveau projet</a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Projet</th>
+        <th>Catégorie</th>
+        <th>Tags</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for project in projects %}
+      <tr>
+        <td style="color: var(--admin-muted);">#{{ project.id }}</td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            {% if project.image %}
+            <img src="{{ url_for('static', filename=project.image) }}" style="width: 48px; height: 32px; border-radius: 4px; object-fit: cover;">
+            {% else %}
+            <div style="width: 48px; height: 32px; border-radius: 4px; background: var(--admin-bg); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--admin-muted);">N/A</div>
+            {% endif %}
+            <div style="font-weight: 500;">{{ project.title }}</div>
+          </div>
+        </td>
+        <td><span style="background: rgba(139, 92, 246, 0.1); color: var(--admin-accent); padding: 2px 8px; border-radius: 12px; font-size: 11px;">{{ project.category }}</span></td>
+        <td style="font-size: 12px; color: var(--admin-muted);">{{ project.tags }}</td>
+        <td>
+          <span class="status-dot {% if project.status == 'Publié' %}success{% else %}warning{% endif %}"></span>
+          <span style="font-size: 13px;">{{ project.status }}</span>
+        </td>
+        <td>
+          <div style="display: flex; gap: 8px;">
+            <a href="{{ url_for('admin.edit_project', id=project.id) }}" class="btn" style="padding: 6px 10px; border: 1px solid var(--admin-border);"><i class="fa-solid fa-pen"></i></a>
+            <form action="{{ url_for('admin.delete_project', id=project.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">
+              <button type="submit" class="btn btn-danger" style="padding: 6px 10px;"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

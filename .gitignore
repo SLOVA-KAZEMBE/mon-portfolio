@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+.venv
+
+# SQLite
+*.db
+*.sqlite3
+
+# Flask
+instance/
+
+# Uploads
+static/img/uploads/*
+!static/img/uploads/.gitkeep
+
+# IDEs
+.vscode/
+.idea/

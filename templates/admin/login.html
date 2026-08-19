@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Connexion - Admin DevFolio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; background-color: var(--admin-bg); }
+    .login-card { background: var(--admin-card); border: 1px solid var(--admin-border); padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    .login-header { text-align: center; margin-bottom: 30px; }
+    .login-header span { color: var(--admin-accent); font-weight: 800; font-size: 24px; }
+    .login-header h1 { font-size: 20px; margin: 10px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="login-header">
+      <span>&lt;/&gt;</span>
+      <h1>Connexion Admin</h1>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form method="post">
+      <div class="form-group">
+        <label>Nom d'utilisateur</label>
+        <input type="text" name="username" class="form-control" required autofocus>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;">Se connecter</button>
+    </form>
+  </div>
+</body>
+</html>

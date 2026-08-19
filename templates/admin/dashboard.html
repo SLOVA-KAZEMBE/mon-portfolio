@@ -1,0 +1,268 @@
+{% extends "admin/layout.html" %}
+
+{% block page_title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: flex-end; margin-bottom: 24px;">
+  <a href="{{ url_for('admin.add_project') }}" class="btn btn-primary" style="border-radius: 8px;"><i class="fa-solid fa-plus"></i> Nouveau contenu <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></a>
+</div>
+
+<div class="stats-grid" style="grid-template-columns: repeat(5, 1fr); gap: 16px;">
+  <!-- Projets publiés -->
+  <div class="stat-card" style="flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px;">
+    <div style="display: flex; gap: 16px; align-items: flex-start; width: 100%;">
+      <div class="stat-icon" style="background-color: rgba(139, 92, 246, 0.1); color: var(--admin-accent);">
+        <i class="fa-regular fa-folder-open"></i>
+      </div>
+      <div>
+        <h3 style="margin: 0; font-size: 13px; color: var(--admin-muted); font-weight: 500;">Projets publiés</h3>
+        <div style="font-size: 24px; font-weight: 700; margin-top: 4px;">{{ projects_count }}</div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 12px;">
+      <span style="color: var(--admin-success);">+2 ce mois</span>
+      <svg width="60" height="20" viewBox="0 0 60 20" fill="none" stroke="var(--admin-success)" stroke-width="2"><path d="M0 15 Q 15 10, 30 15 T 60 5"></path></svg>
+    </div>
+  </div>
+  
+  <!-- Compétences -->
+  <div class="stat-card" style="flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px;">
+    <div style="display: flex; gap: 16px; align-items: flex-start; width: 100%;">
+      <div class="stat-icon" style="background-color: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+        <i class="fa-solid fa-code"></i>
+      </div>
+      <div>
+        <h3 style="margin: 0; font-size: 13px; color: var(--admin-muted); font-weight: 500;">Compétences</h3>
+        <div style="font-size: 24px; font-weight: 700; margin-top: 4px;">{{ skills_count }}</div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 12px;">
+      <span style="color: var(--admin-success);">+3 ce mois</span>
+      <svg width="60" height="20" viewBox="0 0 60 20" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M0 15 Q 15 5, 30 15 T 60 5"></path></svg>
+    </div>
+  </div>
+  
+  <!-- Messages -->
+  <div class="stat-card" style="flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px;">
+    <div style="display: flex; gap: 16px; align-items: flex-start; width: 100%;">
+      <div class="stat-icon" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981;">
+        <i class="fa-regular fa-message"></i>
+      </div>
+      <div>
+        <h3 style="margin: 0; font-size: 13px; color: var(--admin-muted); font-weight: 500;">Messages</h3>
+        <div style="font-size: 24px; font-weight: 700; margin-top: 4px;">{{ new_messages }}</div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 12px;">
+      <span style="color: var(--admin-warning); font-weight: bold;">Nouveaux</span>
+      <svg width="60" height="20" viewBox="0 0 60 20" fill="none" stroke="#10b981" stroke-width="2"><path d="M0 15 Q 15 10, 30 15 T 60 5"></path></svg>
+    </div>
+  </div>
+  
+  <!-- Visites -->
+  <div class="stat-card" style="flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px;">
+    <div style="display: flex; gap: 16px; align-items: flex-start; width: 100%;">
+      <div class="stat-icon" style="background-color: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+        <i class="fa-regular fa-eye"></i>
+      </div>
+      <div>
+        <h3 style="margin: 0; font-size: 13px; color: var(--admin-muted); font-weight: 500;">Visites (30j)</h3>
+        <div style="font-size: 24px; font-weight: 700; margin-top: 4px;">2,842</div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 12px;">
+      <span style="color: var(--admin-success);">+18.4%</span>
+      <svg width="60" height="20" viewBox="0 0 60 20" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M0 15 Q 10 15, 20 10 T 40 15 T 60 5"></path></svg>
+    </div>
+  </div>
+
+  <!-- Abonnés -->
+  <div class="stat-card" style="flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px;">
+    <div style="display: flex; gap: 16px; align-items: flex-start; width: 100%;">
+      <div class="stat-icon" style="background-color: rgba(168, 85, 247, 0.1); color: #a855f7;">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <div>
+        <h3 style="margin: 0; font-size: 13px; color: var(--admin-muted); font-weight: 500;">Abonnés</h3>
+        <div style="font-size: 24px; font-weight: 700; margin-top: 4px;">426</div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 12px;">
+      <span style="color: var(--admin-success);">+29 ce mois</span>
+      <svg width="60" height="20" viewBox="0 0 60 20" fill="none" stroke="#a855f7" stroke-width="2"><path d="M0 10 Q 15 15, 30 10 T 60 5"></path></svg>
+    </div>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+  <!-- Colonne Gauche -->
+  <div>
+    <!-- Projets récents -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Projets récents</h2>
+        <a href="{{ url_for('admin.projects') }}" class="btn" style="border: 1px solid var(--admin-border); background: transparent; padding: 6px 12px; font-size: 12px; color: var(--admin-text);">Voir tous</a>
+      </div>
+      <table class="table" style="font-size: 13px;">
+        <thead>
+          <tr>
+            <th style="padding-left: 24px;">Projet</th>
+            <th>Catégorie</th>
+            <th>Statut</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in recent_projects %}
+          <tr>
+            <td style="padding-left: 24px;">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                {% if project.image %}
+                <img src="{{ url_for('static', filename=project.image) }}" style="width: 56px; height: 36px; border-radius: 6px; object-fit: cover;">
+                {% else %}
+                <div style="width: 56px; height: 36px; border-radius: 6px; background: #1e293b; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--admin-muted);">N/A</div>
+                {% endif %}
+                <div>
+                  <div style="font-weight: 500; font-size: 14px;">{{ project.title }}</div>
+                  <div style="font-size: 12px; color: var(--admin-muted); margin-top: 2px;">{{ project.description[:35] }}{% if project.description|length > 35 %}...{% endif %}</div>
+                </div>
+              </div>
+            </td>
+            <td><span style="background: rgba(139, 92, 246, 0.1); color: var(--admin-accent); padding: 4px 10px; border-radius: 12px; font-size: 11px;">{{ project.category }}</span></td>
+            <td>
+              <span class="status-dot {% if project.status == 'Publié' %}success{% else %}warning{% endif %}"></span>
+              <span style="font-size: 13px;">{{ project.status }}</span>
+            </td>
+            <td style="color: var(--admin-muted);">{{ project.created_at.strftime('%d %b %Y') }}</td>
+            <td style="color: var(--admin-muted); text-align: center;"><i class="fa-solid fa-ellipsis"></i></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Articles récents (Statique) -->
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header">
+        <h2>Articles récents</h2>
+        <a href="#" class="btn" style="border: 1px solid var(--admin-border); background: transparent; padding: 6px 12px; font-size: 12px; color: var(--admin-text);">Voir tous</a>
+      </div>
+      <table class="table" style="font-size: 13px;">
+        <thead>
+          <tr>
+            <th style="padding-left: 24px;">Article</th>
+            <th>Catégorie</th>
+            <th>Statut</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding-left: 24px;">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 56px; height: 36px; border-radius: 6px; background: #1e293b;"><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=100&q=80" style="width:100%; height:100%; object-fit:cover; border-radius:6px;"></div>
+                <div style="font-weight: 500; font-size: 14px;">Les tendances du UI/UX en 2026</div>
+              </div>
+            </td>
+            <td><span style="background: rgba(168, 85, 247, 0.1); color: #a855f7; padding: 4px 10px; border-radius: 12px; font-size: 11px;">Design</span></td>
+            <td>
+              <span class="status-dot success"></span>
+              <span>Publié</span>
+            </td>
+            <td style="color: var(--admin-muted);">10 mai 2026</td>
+            <td style="color: var(--admin-muted); text-align: center;"><i class="fa-solid fa-ellipsis"></i></td>
+          </tr>
+          <tr>
+            <td style="padding-left: 24px;">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 56px; height: 36px; border-radius: 6px; background: #1e293b;"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=100&q=80" style="width:100%; height:100%; object-fit:cover; border-radius:6px;"></div>
+                <div style="font-weight: 500; font-size: 14px;">Optimiser les performances web</div>
+              </div>
+            </td>
+            <td><span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 4px 10px; border-radius: 12px; font-size: 11px;">Développement</span></td>
+            <td>
+              <span class="status-dot success"></span>
+              <span>Publié</span>
+            </td>
+            <td style="color: var(--admin-muted);">02 mai 2026</td>
+            <td style="color: var(--admin-muted); text-align: center;"><i class="fa-solid fa-ellipsis"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Colonne Droite -->
+  <div>
+    <!-- Messages récents -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Messages récents</h2>
+        <a href="{{ url_for('admin.messages') }}" class="btn" style="border: 1px solid var(--admin-border); background: transparent; padding: 6px 12px; font-size: 12px; color: var(--admin-text);">Voir tous</a>
+      </div>
+      <div style="padding: 0;">
+        {% for message in recent_messages %}
+        <div style="display: flex; gap: 16px; padding: 16px 24px; border-bottom: 1px solid var(--admin-border);">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #f59e0b; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0; color: #fff;">
+            {{ message.name[0]|upper }}
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+              <strong style="font-size: 14px;">{{ message.name }}</strong>
+              <span style="font-size: 11px; color: var(--admin-muted);">
+                Il y a {{ (range(1, 10) | random) }}h
+              </span>
+            </div>
+            <div style="font-size: 11px; color: var(--admin-muted); margin-bottom: 4px;">{{ message.email }}</div>
+            <div style="font-size: 13px; color: var(--admin-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ message.content }}</div>
+          </div>
+          {% if not message.is_read %}
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--admin-accent); margin-top: 12px;"></div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <!-- Activité récente (Statique) -->
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header" style="border-bottom: none; padding-bottom: 12px;">
+        <h2>Activité récente</h2>
+      </div>
+      <div style="padding: 0 24px 24px 24px; display: flex; flex-direction: column; gap: 24px; position: relative;">
+        <!-- Ligne verticale décorative -->
+        <div style="position: absolute; left: 40px; top: 10px; bottom: 20px; width: 1px; background: var(--admin-border); z-index: 1;"></div>
+        
+        <div style="display: flex; gap: 16px; align-items: flex-start; z-index: 2;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--admin-card); border: 2px solid var(--admin-border); color: var(--admin-accent); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;"><i class="fa-regular fa-folder-open"></i></div>
+          <div style="flex: 1; margin-top: 2px;">
+            <div style="font-size: 13px; font-weight: 500;">Nouveau projet publié</div>
+            <div style="font-size: 12px; color: var(--admin-muted); margin-top: 4px;">Dashboard SaaS a été publié</div>
+          </div>
+          <div style="font-size: 11px; color: var(--admin-muted); margin-top: 4px;">Il y a 2h</div>
+        </div>
+        
+        <div style="display: flex; gap: 16px; align-items: flex-start; z-index: 2;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--admin-card); border: 2px solid var(--admin-border); color: var(--admin-accent); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;"><i class="fa-regular fa-envelope"></i></div>
+          <div style="flex: 1; margin-top: 2px;">
+            <div style="font-size: 13px; font-weight: 500;">Nouveau message reçu</div>
+            <div style="font-size: 12px; color: var(--admin-muted); margin-top: 4px;">De la part de Martin Dupont</div>
+          </div>
+          <div style="font-size: 11px; color: var(--admin-muted); margin-top: 4px;">Il y a 2h</div>
+        </div>
+        
+        <div style="display: flex; gap: 16px; align-items: flex-start; z-index: 2;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--admin-card); border: 2px solid var(--admin-border); color: var(--admin-success); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;"><i class="fa-solid fa-code"></i></div>
+          <div style="flex: 1; margin-top: 2px;">
+            <div style="font-size: 13px; font-weight: 500;">Compétence mise à jour</div>
+            <div style="font-size: 12px; color: var(--admin-muted); margin-top: 4px;">React.js a été modifiée</div>
+          </div>
+          <div style="font-size: 11px; color: var(--admin-muted); margin-top: 4px;">Il y a 5h</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

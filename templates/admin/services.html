@@ -1,0 +1,65 @@
+{% extends "admin/layout.html" %}
+
+{% block page_title %}Services{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+  
+  <div class="card">
+    <div class="card-header">
+      <h2>Liste des services</h2>
+    </div>
+    <div style="padding: 24px;">
+      <ul style="margin-bottom: 24px;">
+        {% for srv in services %}
+        <li style="display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid var(--admin-border);">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="color: var(--admin-accent); font-size: 28px; width: 40px; text-align: center;">
+              {% if srv.icon.startswith('fa-') %}
+              <i class="{{ srv.icon }}"></i>
+              {% else %}
+              <i class="fa-solid fa-{{ srv.icon }}"></i>
+              {% endif %}
+            </div>
+            <div>
+              <div style="font-weight: bold; font-size: 16px;">{{ srv.title }}</div>
+              <div style="font-size: 14px; margin-top: 4px; color: var(--admin-muted);">{{ srv.description }}</div>
+            </div>
+          </div>
+          <form action="{{ url_for('admin.delete_service', id=srv.id) }}" method="POST" onsubmit="return confirm('Supprimer ce service ?');">
+            <button class="btn" style="color: var(--admin-danger); background: transparent; padding: 4px;"><i class="fa-solid fa-trash"></i></button>
+          </form>
+        </li>
+        {% endfor %}
+        {% if not services %}
+        <li style="color: var(--admin-muted);">Aucun service trouvé.</li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Ajouter un service</h2>
+    </div>
+    <div style="padding: 24px;">
+      <form method="POST">
+        <div class="form-group">
+          <label>Icône (Feather ou FontAwesome, ex: code, pen)</label>
+          <input type="text" name="icon" class="form-control" required placeholder="code">
+        </div>
+        <div class="form-group">
+          <label>Titre du service</label>
+          <input type="text" name="title" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="description" class="form-control" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-plus"></i> Ajouter</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

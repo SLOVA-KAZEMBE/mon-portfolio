@@ -1,0 +1,47 @@
+{% extends "admin/layout.html" %}
+
+{% block page_title %}Messages reçus{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 900px; margin: 0 auto;">
+  <div class="card-header">
+    <h2>Tous les messages ({{ messages|length }})</h2>
+  </div>
+  <div style="padding: 0;">
+    {% if messages %}
+      {% for message in messages %}
+      <div style="padding: 24px; border-bottom: 1px solid var(--admin-border);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <div style="display: flex; gap: 16px;">
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--admin-accent); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">
+              {{ message.name[0]|upper }}
+            </div>
+            <div>
+              <div style="font-weight: 600; font-size: 16px;">{{ message.name }}</div>
+              <div style="font-size: 13px; color: var(--admin-muted);"><a href="mailto:{{ message.email }}">{{ message.email }}</a></div>
+            </div>
+          </div>
+          <div style="font-size: 12px; color: var(--admin-muted);">
+            {{ message.created_at.strftime('%d %B %Y, %H:%M') }}
+          </div>
+        </div>
+        {% if message.subject %}
+        <div style="font-weight: 500; margin-bottom: 8px;">Sujet: {{ message.subject }}</div>
+        {% endif %}
+        <div style="background: var(--admin-bg); padding: 16px; border-radius: 8px; border: 1px solid var(--admin-border); font-size: 14px; line-height: 1.6;">
+          {{ message.content|replace('\n', '<br>')|safe }}
+        </div>
+        <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+          <a href="mailto:{{ message.email }}" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-reply"></i> Répondre</a>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div style="padding: 40px; text-align: center; color: var(--admin-muted);">
+        <i class="fa-regular fa-envelope-open" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+        <p>Aucun message pour le moment.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

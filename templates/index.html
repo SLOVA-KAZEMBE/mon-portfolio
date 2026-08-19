@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.name }} — {{ profile.role }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+
+  <body>
+
+    <header class="navbar">
+      <div class="navbar__inner">
+        <a href="#accueil" class="brand">
+          <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo" class="brand__logo">
+          {{ profile.name }}
+        </a>
+
+        <nav class="nav-links" id="navLinks">
+          <a href="#accueil" class="nav-link is-active" data-section="accueil">Accueil</a>
+          <a href="#a-propos" class="nav-link" data-section="a-propos">À propos</a>
+          <a href="#projets" class="nav-link" data-section="projets">Projets</a>
+          <a href="#competences" class="nav-link" data-section="competences">Compétences</a>
+          <a href="#experience" class="nav-link" data-section="experience">Expérience</a>
+          <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+        </nav>
+
+        <div class="navbar__actions">
+          <button class="icon-btn" id="themeToggle" aria-label="Changer de thème">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <button class="icon-btn nav-toggle" id="navToggle" aria-label="Ouvrir le menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-wrap">
+            {% for category, message in messages %}
+              <div class="flash flash--{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- ===================== ACCUEIL ===================== -->
+      <section class="hero" id="accueil">
+        <div class="hero__grid">
+          <div class="hero__text">
+            <span class="badge"><span class="badge__dot"></span> Disponible pour de nouveaux projets</span>
+            <h1 class="hero__title">
+              Salut, je suis {{ profile.name }}<br>
+              <span class="hero__title--gradient">{{ profile.role }}</span>
+            </h1>
+            <p class="hero__tagline">{{ profile.tagline }}</p>
+
+            <div class="hero__actions">
+              <a href="#projets" class="btn btn--primary">Voir mes projets</a>
+              <a href="#contact" class="btn btn--outline">Me contacter</a>
+            </div>
+
+            <div class="socials">
+              <span class="socials__label">Suivez-moi</span>
+              <div class="socials__icons">
+                <a href="{{ profile.socials.github }}" class="icon-btn" aria-label="GitHub">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.68 1.25 3.34.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.8 1.19 1.83 1.19 3.09 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5z"/></svg>
+                </a>
+                <a href="{{ profile.socials.linkedin }}" class="icon-btn" aria-label="LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.11 20.45H3.55V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+                </a>
+                <a href="{{ profile.socials.twitter }}" class="icon-btn" aria-label="Twitter / X">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2.25h3.68l-8.04 9.19L24 21.75h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 2.25h7.6l5.24 6.93zm-1.29 17.2h2.04L6.49 4.42H4.3z"/></svg>
+                </a>
+                <a href="{{ profile.socials.dribbble }}" class="icon-btn" aria-label="Dribbble">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8.5 3.5c2.5 3 4 6.5 4.5 12M20 9.5c-3 1-6.5 1.2-9.5.2M3 15c4-1 8-.5 11 1.5"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero__visual">
+            <div class="hero__portrait">
+              <div class="hero__portrait-glow"></div>
+              <div class="hero__portrait-frame">
+                <img src="{{ url_for('static', filename=profile.hero_photo) }}" alt="Photo de {{ profile.name }}" class="hero__photo">
+              </div>
+              {% for badge in tech_badges %}
+              <span class="floating-badge floating-badge--{{ loop.index }}"
+                    style="background:{{ badge.color }}; {% if badge.border %}border:2px solid {{ badge.border }};{% endif %} color:{{ badge.text_color or ('#111' if badge.text_dark else '#fff') }};"
+                    title="{{ badge.label }}">{{ badge.short }}</span>
+              {% endfor %}
+            </div>
+            <div class="code-card">
+              <div class="code-card__dots"><span></span><span></span><span></span></div>
+              <pre class="code-card__body"><span class="tok-kw">const</span> developer = {
+      passion: <span class="tok-str">'Front-end'</span>,
+      focus: <span class="tok-str">'UI/UX'</span>,
+      love: <span class="tok-str">'Clean Code'</span>
+    }</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats">
+          {% for s in profile.stats %}
+          <div class="stat-card">
+            <div class="stat-card__icon">
+              {% if s.icon == 'calendar' %}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              {% elif s.icon == 'code' %}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              {% elif s.icon == 'users' %}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              {% else %}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/></svg>
+              {% endif %}
+            </div>
+            <div>
+              <div class="stat-card__value">{{ s.value }}</div>
+              <div class="stat-card__label">{{ s.label }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ===================== A PROPOS ===================== -->
+      <section class="section" id="a-propos">
+        <span class="eyebrow">À propos de moi</span>
+        <div class="about__grid">
+          <div class="about__visual">
+            <div class="about__portrait">
+              <div class="about__portrait-glow"></div>
+              <div class="about__portrait-frame">
+                <img src="{{ url_for('static', filename=profile.about_photo) }}" alt="Photo de {{ profile.name }}" class="about__photo">
+              </div>
+            </div>
+            <div class="about__status-card">
+              <span class="badge__dot"></span>
+              <div>
+                <strong>Disponible</strong>
+                <div class="muted">Pour de nouveaux projets</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about__content">
+            <h2 class="section__title">Qui suis-je ?</h2>
+            {% for p in about.paragraphs %}
+            <p class="about__paragraph">{{ p }}</p>
+            {% endfor %}
+
+            <dl class="info-list">
+              {% for item in about.info %}
+              <div class="info-list__row">
+                <div class="info-list__icon">
+                  {% if item.label == 'Nom' %}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  {% elif item.label == 'Email' %}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                  {% elif item.label == 'Localisation' %}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  {% else %}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {% endif %}
+                </div>
+                <div>
+                  <dt>{{ item.label }}</dt>
+                  <dd>{{ item.value }}</dd>
+                </div>
+              </div>
+              {% endfor %}
+            </dl>
+
+            <a href="https://canva.link/bx6gt0pguhhzg7v" class="btn btn--primary">Voir mon CV</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== PROJETS ===================== -->
+      <section class="section" id="projets">
+        <span class="eyebrow">Mes réalisations</span>
+        <h2 class="section__title">Projets sélectionnés</h2>
+        <p class="section__subtitle">Voici une sélection de projets que j'ai réalisés avec passion.</p>
+
+        <div class="filters" id="filters">
+          {% for cat in categories %}
+          <button class="filter-btn {{ 'is-active' if loop.first }}" data-filter="{{ cat }}">{{ cat }}</button>
+          {% endfor %}
+        </div>
+
+        <div class="project-grid" id="projectGrid">
+          {% for p in projects %}
+          <article class="project-card" data-category="{{ p.category }}">
+            <div class="project-card__thumb thumb--{{ p.color }}" {% if p.image %}style="background-image: url('{{ url_for('static', filename=p.image) }}'); background-size: cover; background-position: center;"{% endif %}>
+              {% if p.link %}
+              <a href="{{ p.link }}" target="_blank" class="project-card__link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              {% else %}
+              <span class="project-card__link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </span>
+              {% endif %}
+            </div>
+            <div class="project-card__body">
+              <h3>{{ p.title }}</h3>
+              <p>{{ p.description }}</p>
+              <div class="tag-row">
+                {% if p.tags %}
+                {% for t in p.tags.split(',') %}
+                <span class="tag">{{ t.strip() }}</span>
+                {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ===================== COMPETENCES ===================== -->
+      <section class="section" id="competences">
+        <span class="eyebrow">Mes compétences</span>
+        <h2 class="section__title">Technologies &amp; Outils</h2>
+        <p class="section__subtitle">Les technologies que j'utilise pour donner vie à des idées.</p>
+
+        <div class="skills__grid">
+          <div class="panel">
+            <h3 class="panel__title">Compétences techniques</h3>
+            {% for s in tech_skills %}
+            <div class="skill-bar">
+              <div class="skill-bar__head">
+                <span>{{ s.name }}</span>
+                <span class="muted">{{ s.level }}%</span>
+              </div>
+              <div class="skill-bar__track">
+                <div class="skill-bar__fill" style="width: {{ s.level }}%;"></div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="panel">
+            <h3 class="panel__title">Outils &amp; Environnement</h3>
+            <div class="tools-grid">
+              {% for tool in tools %}
+              <div class="tool-chip">
+                <div class="tool-chip__icon">{{ tool[0] }}</div>
+                <span>{{ tool }}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <h3 class="section__title section__title--sm">Ce que je fais</h3>
+        <div class="services-grid">
+          {% for s in services %}
+          <div class="service-card">
+            <div class="service-card__icon">
+              {% if s.icon == 'layout' %}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              {% elif s.icon == 'code' %}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              {% elif s.icon == 'smartphone' %}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              {% else %}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              {% endif %}
+            </div>
+            <h4>{{ s.title }}</h4>
+            <p>{{ s.description }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ===================== EXPERIENCE ===================== -->
+      <section class="section" id="experience">
+        <span class="eyebrow">Mon parcours</span>
+        <h2 class="section__title">Expérience professionnelle</h2>
+        <p class="section__subtitle">Les étapes clés de mon parcours en tant que développeur front-end.</p>
+
+        <div class="timeline">
+          {% for job in experience %}
+          <div class="timeline__item">
+            <div class="timeline__dot"></div>
+            <div class="timeline__card">
+              <span class="timeline__period">{{ job.period }}</span>
+              <h3>{{ job.role }}</h3>
+              <div class="timeline__company">{{ job.company }}</div>
+              <p>{{ job.description }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ===================== CONTACT ===================== -->
+      <section class="section" id="contact">
+        <span class="eyebrow">Contactez-moi</span>
+        <div class="contact__grid">
+          <div class="contact__intro">
+            <h2 class="section__title">Travaillons ensemble</h2>
+            <p class="section__subtitle">Vous avez un projet en tête ou souhaitez simplement échanger ? N'hésitez pas à me contacter.</p>
+
+            <div class="contact-info">
+              <div class="contact-info__row">
+                <div class="contact-info__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                </div>
+                <div>
+                  <strong>Email</strong>
+                  <div class="muted">{{ profile.email }}</div>
+                </div>
+              </div>
+              <div class="contact-info__row">
+                <div class="contact-info__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div>
+                  <strong>Téléphone</strong>
+                  <div class="muted">{{ profile.phone }}</div>
+                </div>
+              </div>
+              <div class="contact-info__row">
+                <div class="contact-info__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <div>
+                  <strong>Localisation</strong>
+                  <div class="muted">{{ profile.location }}</div>
+                </div>
+              </div>
+              <div class="contact-info__row">
+                <div class="contact-info__icon">
+                  <span class="badge__dot"></span>
+                </div>
+                <div>
+                  <strong>Disponibilité</strong>
+                  <div class="muted">Disponible maintenant</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="socials">
+              <div class="socials__icons">
+                <a href="{{ profile.socials.github }}" class="icon-btn" aria-label="GitHub">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.68 1.25 3.34.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.8 1.19 1.83 1.19 3.09 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5z"/></svg>
+                </a>
+                <a href="{{ profile.socials.linkedin }}" class="icon-btn" aria-label="LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.11 20.45H3.55V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+                </a>
+                <a href="{{ profile.socials.twitter }}" class="icon-btn" aria-label="Twitter / X">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2.25h3.68l-8.04 9.19L24 21.75h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 2.25h7.6l5.24 6.93zm-1.29 17.2h2.04L6.49 4.42H4.3z"/></svg>
+                </a>
+                <a href="{{ profile.socials.dribbble }}" class="icon-btn" aria-label="Dribbble">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8.5 3.5c2.5 3 4 6.5 4.5 12M20 9.5c-3 1-6.5 1.2-9.5.2M3 15c4-1 8-.5 11 1.5"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <form class="contact-form" method="post" action="{{ url_for('contact') }}">
+            <div class="form-row">
+              <label for="name">Nom</label>
+              <input type="text" id="name" name="name" placeholder="Votre nom" required>
+            </div>
+            <div class="form-row">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+            </div>
+            <div class="form-row">
+              <label for="subject">Sujet</label>
+              <input type="text" id="subject" name="subject" placeholder="Sujet de votre message">
+            </div>
+            <div class="form-row">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Votre message..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary btn--block">
+              Envoyer le message
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <p>&copy; 2026 {{ profile.first_name }}Folio. Tous droits réservés.</p>
+        <div class="footer-links">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>
