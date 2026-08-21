@@ -90,7 +90,7 @@
             <div class="hero__portrait">
               <div class="hero__portrait-glow"></div>
               <div class="hero__portrait-frame">
-                <img src="{{ url_for('static', filename=profile.hero_photo) }}" alt="Photo de {{ profile.name }}" class="hero__photo">
+                <img src="{{ image_url(profile.hero_photo) }}" alt="Photo de {{ profile.name }}" class="hero__photo">
               </div>
               {% for badge in tech_badges %}
               <span class="floating-badge floating-badge--{{ loop.index }}"
@@ -140,7 +140,7 @@
             <div class="about__portrait">
               <div class="about__portrait-glow"></div>
               <div class="about__portrait-frame">
-                <img src="{{ url_for('static', filename=profile.about_photo) }}" alt="Photo de {{ profile.name }}" class="about__photo">
+                <img src="{{ image_url(profile.about_photo) }}" alt="Photo de {{ profile.name }}" class="about__photo">
               </div>
             </div>
             <div class="about__status-card">
@@ -200,7 +200,7 @@
         <div class="project-grid" id="projectGrid">
           {% for p in projects %}
           <article class="project-card" data-category="{{ p.category }}">
-            <div class="project-card__thumb thumb--{{ p.color }}" {% if p.image %}style="background-image: url('{{ url_for('static', filename=p.image) }}'); background-size: cover; background-position: center;"{% endif %}>
+            <div class="project-card__thumb thumb--{{ p.color }}" {% if p.image %}style="background-image: url('{{ image_url(p.image) }}'); background-size: cover; background-position: center;"{% endif %}>
               {% if p.link %}
               <a href="{{ p.link }}" target="_blank" class="project-card__link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>

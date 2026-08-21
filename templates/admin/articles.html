@@ -26,7 +26,7 @@
         <td>
           <div style="display: flex; align-items: center; gap: 12px;">
             {% if article.image %}
-            <img src="{{ url_for('static', filename=article.image) }}" style="width: 48px; height: 32px; border-radius: 4px; object-fit: cover;">
+            <img src="{{ image_url(article.image) }}" style="width: 48px; height: 32px; border-radius: 4px; object-fit: cover;">
             {% else %}
             <div style="width: 48px; height: 32px; border-radius: 4px; background: var(--admin-bg); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--admin-muted);">N/A</div>
             {% endif %}

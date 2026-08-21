@@ -84,7 +84,7 @@
           <input type="file" name="hero_photo" class="form-control" accept="image/*">
           {% if profile.hero_photo %}
           <div style="margin-top: 10px;">
-            <img src="{{ url_for('static', filename=profile.hero_photo) }}" style="max-height: 80px; border-radius: 4px;">
+            <img src="{{ image_url(profile.hero_photo) }}" style="max-height: 80px; border-radius: 4px;">
           </div>
           {% endif %}
         </div>
@@ -93,7 +93,7 @@
           <input type="file" name="about_photo" class="form-control" accept="image/*">
           {% if profile.about_photo %}
           <div style="margin-top: 10px;">
-            <img src="{{ url_for('static', filename=profile.about_photo) }}" style="max-height: 80px; border-radius: 4px;">
+            <img src="{{ image_url(profile.about_photo) }}" style="max-height: 80px; border-radius: 4px;">
           </div>
           {% endif %}
         </div>

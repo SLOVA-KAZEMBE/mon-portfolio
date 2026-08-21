@@ -59,6 +59,16 @@ TECH_BADGES = [
     {"label": "Tailwind CSS", "short": "〜", "color": "#0d1117", "border": "#38bdf8", "text_color": "#38bdf8"},
 ]
 
+@app.context_processor
+def utility_processor():
+    def image_url(path, default_placeholder="img/placeholder.png"):
+        if not path:
+            return url_for('static', filename=default_placeholder)
+        if path.startswith('http://') or path.startswith('https://'):
+            return path
+        return url_for('static', filename=path)
+    return dict(image_url=image_url)
+
 
 @app.context_processor
 def inject_globals():
