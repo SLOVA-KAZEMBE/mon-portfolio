@@ -63,50 +63,88 @@ TECH_BADGES = [
 @app.context_processor
 def inject_globals():
     """Rend le profil disponible dans tous les templates."""
-    prof = Profile.query.first()
+    try:
+        prof = Profile.query.first()
+    except Exception:
+        prof = None
+
+    # --- Profil par défaut si la table est vide ou inaccessible ---
     if not prof:
-        return {}
-    
+        default_profile = {
+            "name": "Kazembe",
+            "first_name": "Slova",
+            "role": "Développeur Web Front-end",
+            "tagline": "Je crée des expériences web modernes et performantes.",
+            "location": "Lubumbashi, RDC",
+            "email": "slovakazembe@gmail.com",
+            "phone": "",
+            "availability": "Disponible pour freelance",
+            "cv_url": None,
+            "hero_photo": None,
+            "about_photo": None,
+            "socials": {"github": "#", "linkedin": "#", "twitter": "#", "dribbble": "#"},
+            "stats": [
+                {"icon": "calendar", "value": "2+", "label": "Années d'expérience"},
+                {"icon": "code", "value": "10+", "label": "Projets réalisés"},
+                {"icon": "users", "value": "5+", "label": "Clients satisfaits"},
+                {"icon": "heart", "value": "100%", "label": "Passionné"},
+            ],
+        }
+        default_about = {
+            "paragraphs": [
+                "Développeur web passionné, spécialisé dans la création d'interfaces modernes.",
+                "En formation Bac 3 Informatique à Lubumbashi, je combine académique et freelance.",
+            ],
+            "info": [
+                {"label": "Nom", "value": "Slova Kazembe"},
+                {"label": "Email", "value": "slovakazembe@gmail.com"},
+                {"label": "Localisation", "value": "Lubumbashi, RDC"},
+                {"label": "Disponibilité", "value": "Disponible pour freelance"},
+            ]
+        }
+        return {"profile": default_profile, "about": default_about}
+
+    # --- Profil depuis la base de données ---
     about_paragraphs = []
     if prof.about_paragraphs:
         try:
             about_paragraphs = json.loads(prof.about_paragraphs)
-        except:
+        except Exception:
             about_paragraphs = prof.about_paragraphs.split('\n\n')
 
     profile_dict = {
-        "name": prof.name,
-        "first_name": prof.first_name,
-        "role": prof.role,
-        "tagline": prof.tagline,
-        "location": prof.location,
-        "email": prof.email,
-        "phone": prof.phone,
-        "availability": prof.availability,
+        "name": prof.name or "Kazembe",
+        "first_name": prof.first_name or "Slova",
+        "role": prof.role or "Développeur Web",
+        "tagline": prof.tagline or "",
+        "location": prof.location or "Lubumbashi, RDC",
+        "email": prof.email or "",
+        "phone": prof.phone or "",
+        "availability": prof.availability or "Disponible",
         "cv_url": prof.cv_url,
         "hero_photo": prof.hero_photo,
         "about_photo": prof.about_photo,
         "socials": {
-            "github": prof.github,
-            "linkedin": prof.linkedin,
-            "twitter": prof.twitter,
-            "dribbble": prof.dribbble,
+            "github": prof.github or "#",
+            "linkedin": prof.linkedin or "#",
+            "twitter": prof.twitter or "#",
+            "dribbble": prof.dribbble or "#",
         },
         "stats": [
-            {"icon": "calendar", "value": prof.stats_years, "label": "Années d'expérience"},
-            {"icon": "code", "value": prof.stats_projects, "label": "Projets réalisés"},
-            {"icon": "users", "value": prof.stats_clients, "label": "Clients satisfaits"},
-            {"icon": "heart", "value": prof.stats_passion, "label": "Passionné"},
+            {"icon": "calendar", "value": prof.stats_years or "2+", "label": "Années d'expérience"},
+            {"icon": "code", "value": prof.stats_projects or "10+", "label": "Projets réalisés"},
+            {"icon": "users", "value": prof.stats_clients or "5+", "label": "Clients satisfaits"},
+            {"icon": "heart", "value": prof.stats_passion or "100%", "label": "Passionné"},
         ],
     }
-    
+
     about_dict = {
         "paragraphs": about_paragraphs,
         "info": [
-            {"label": "Nom", "value": prof.name},
-            {"label": "Email", "value": prof.email},
-            {"label": "Localisation", "value": prof.location},
-            {"label": "Disponibilité", "value": prof.availability},
+            {"label": "Nom", "value": prof.name or ""},
+            {"label": "Email", "value": prof.email or ""},
+            {"label": "Localisation", "value": prof.location or ""},
+            {"label": "Disponibilité", "value": prof.availability or ""},
         ]
     }
     return {"profile": profile_dict, "about": about_dict}
