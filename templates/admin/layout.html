@@ -7,10 +7,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+  {% if current_user.is_authenticated %}
   <input type="checkbox" id="mobile-menu-toggle" class="mobile-toggle-checkbox">
   <label for="mobile-menu-toggle" class="sidebar-overlay"></label>
-
-  {% if current_user.is_authenticated %}
   <aside class="sidebar">
     <div class="sidebar-header">
       <span style="color:var(--admin-accent); font-weight: 800;">&lt;/&gt;</span> 

@@ -22,7 +22,13 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def upload_file(image_file, root_path):
-    if not image_file or not allowed_file(image_file.filename):
+    """Upload une image et retourne son URL ou chemin relatif."""
+    # Aucun fichier soumis ou fichier vide
+    if not image_file or image_file.filename == '' or not image_file.filename:
+        return None
+
+    if not allowed_file(image_file.filename):
+        print(f"Extension non autorisée: {image_file.filename}")
         return None
     
     filename = secure_filename(image_file.filename)
@@ -30,21 +36,46 @@ def upload_file(image_file, root_path):
     
     if supabase:
         try:
-            # Upload to Supabase Storage bucket named 'portfolio'
             file_bytes = image_file.read()
-            supabase.storage.from_('portfolio').upload(unique_filename, file_bytes, {"content-type": image_file.content_type})
-            # Get public URL
+            # Vérifier que le fichier n'est pas vide
+            if not file_bytes:
+                print("Fichier vide reçu, upload annulé.")
+                return None
+
+            # Upload dans le bucket 'portfolio' avec upsert pour éviter conflit
+            content_type = image_file.content_type or 'image/jpeg'
+            response = supabase.storage.from_('portfolio').upload(
+                path=unique_filename,
+                file=file_bytes,
+                file_options={"content-type": content_type, "upsert": "true"}
+            )
+            print(f"Upload Supabase réussi: {response}")
+            
+            # Récupérer l'URL publique
             public_url = supabase.storage.from_('portfolio').get_public_url(unique_filename)
             return public_url
         except Exception as e:
-            print("Erreur upload Supabase:", e)
-            return None
+            print(f"Erreur upload Supabase: {type(e).__name__}: {e}")
+            # Fallback local si Supabase échoue
+            try:
+                upload_folder = os.path.join(root_path, 'static', 'img', 'uploads')
+                os.makedirs(upload_folder, exist_ok=True)
+                with open(os.path.join(upload_folder, unique_filename), 'wb') as f_out:
+                    f_out.write(file_bytes)
+                return f'img/uploads/{unique_filename}'
+            except Exception as e2:
+                print(f"Erreur fallback local: {e2}")
+                return None
     else:
-        # Local upload fallback
-        upload_folder = os.path.join(root_path, 'static', 'img', 'uploads')
-        os.makedirs(upload_folder, exist_ok=True)
-        image_file.save(os.path.join(upload_folder, unique_filename))
-        return f'img/uploads/{unique_filename}'
+        # Mode local sans Supabase
+        try:
+            upload_folder = os.path.join(root_path, 'static', 'img', 'uploads')
+            os.makedirs(upload_folder, exist_ok=True)
+            image_file.save(os.path.join(upload_folder, unique_filename))
+            return f'img/uploads/{unique_filename}'
+        except Exception as e:
+            print(f"Erreur upload local: {e}")
+            return None
 
 @admin_bp.context_processor
 def inject_admin_globals():
