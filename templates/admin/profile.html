@@ -82,6 +82,8 @@
         <div class="form-group">
           <label>Photo principale (Héros / Accueil)</label>
           <input type="file" name="hero_photo" class="form-control" accept="image/*">
+          <label style="margin-top: 10px; font-size: 12px; color: var(--admin-muted);">— ou coller une URL d'image —</label>
+          <input type="url" name="hero_photo_url" class="form-control" placeholder="https://..." value="{{ profile.hero_photo if profile.hero_photo and profile.hero_photo.startswith('http') else '' }}" style="margin-top: 6px;">
           {% if profile.hero_photo %}
           <div style="margin-top: 10px;">
             <img src="{{ image_url(profile.hero_photo) }}" style="max-height: 80px; border-radius: 4px;">
@@ -91,6 +93,8 @@
         <div class="form-group">
           <label>Photo À propos</label>
           <input type="file" name="about_photo" class="form-control" accept="image/*">
+          <label style="margin-top: 10px; font-size: 12px; color: var(--admin-muted);">— ou coller une URL d'image —</label>
+          <input type="url" name="about_photo_url" class="form-control" placeholder="https://..." value="{{ profile.about_photo if profile.about_photo and profile.about_photo.startswith('http') else '' }}" style="margin-top: 6px;">
           {% if profile.about_photo %}
           <div style="margin-top: 10px;">
             <img src="{{ image_url(profile.about_photo) }}" style="max-height: 80px; border-radius: 4px;">

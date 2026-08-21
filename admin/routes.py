@@ -361,12 +361,18 @@ def profile_settings():
         prof.twitter = request.form.get('twitter')
         prof.dribbble = request.form.get('dribbble')
 
-        # Photos
+        # Photos : essayer l'upload fichier d'abord, sinon prendre l'URL collée
         for field in ['hero_photo', 'about_photo']:
             photo_file = request.files.get(field)
             new_photo_path = upload_file(photo_file, current_app.root_path)
             if new_photo_path:
+                # Upload fichier réussi
                 setattr(prof, field, new_photo_path)
+            else:
+                # Pas de fichier → vérifier si une URL a été collée
+                url_field = request.form.get(f'{field}_url', '').strip()
+                if url_field and url_field.startswith('http'):
+                    setattr(prof, field, url_field)
 
         db.session.commit()
         flash('Profil mis à jour', 'success')
