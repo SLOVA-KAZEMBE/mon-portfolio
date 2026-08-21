@@ -1,5 +1,5 @@
 import os
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
@@ -109,7 +109,7 @@ def add_project():
         link = request.form.get('link', '')
         
         image_file = request.files.get('image')
-        image_path = upload_file(image_file, request.app.root_path)
+        image_path = upload_file(image_file, current_app.root_path)
 
         project = Project(title=title, category=category, description=description, tags=tags, status=status, color=color, image=image_path, link=link)
         db.session.add(project)
@@ -132,7 +132,7 @@ def edit_project(id):
         project.link = request.form.get('link', project.link)
         
         image_file = request.files.get('image')
-        new_image_path = upload_file(image_file, request.app.root_path)
+        new_image_path = upload_file(image_file, current_app.root_path)
         if new_image_path:
             project.image = new_image_path
             
@@ -261,7 +261,7 @@ def add_article():
         status = request.form.get('status')
         
         image_file = request.files.get('image')
-        image_path = upload_file(image_file, request.app.root_path)
+        image_path = upload_file(image_file, current_app.root_path)
 
         article = Article(title=title, category=category, content=content, status=status, image=image_path)
         db.session.add(article)
@@ -281,7 +281,7 @@ def edit_article(id):
         article.status = request.form.get('status')
         
         image_file = request.files.get('image')
-        new_image_path = upload_file(image_file, request.app.root_path)
+        new_image_path = upload_file(image_file, current_app.root_path)
         if new_image_path:
             article.image = new_image_path
             
@@ -333,7 +333,7 @@ def profile_settings():
         # Photos
         for field in ['hero_photo', 'about_photo']:
             photo_file = request.files.get(field)
-            new_photo_path = upload_file(photo_file, request.app.root_path)
+            new_photo_path = upload_file(photo_file, current_app.root_path)
             if new_photo_path:
                 setattr(prof, field, new_photo_path)
 

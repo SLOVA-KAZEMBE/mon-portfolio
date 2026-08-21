@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+  <input type="checkbox" id="mobile-menu-toggle" class="mobile-toggle-checkbox">
+  <label for="mobile-menu-toggle" class="sidebar-overlay"></label>
+
   {% if current_user.is_authenticated %}
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -81,9 +84,14 @@
   <main class="main-content">
     {% if current_user.is_authenticated %}
     <header class="topbar">
-      <div class="topbar-title">{% block page_title %}{% endblock %}</div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <label for="mobile-menu-toggle" class="mobile-menu-btn">
+          <i class="fa-solid fa-bars"></i>
+        </label>
+        <div class="topbar-title">{% block page_title %}{% endblock %}</div>
+      </div>
       <div class="topbar-actions">
-        <div style="background: var(--admin-card); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--admin-border); display: flex; align-items: center; gap: 8px; font-size: 13px; margin-right: 16px;">
+        <div class="search-bar-container" style="background: var(--admin-card); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--admin-border); display: flex; align-items: center; gap: 8px; font-size: 13px; margin-right: 16px;">
           <i class="fa-solid fa-search" style="color: var(--admin-muted);"></i>
           <input type="text" placeholder="Rechercher..." style="background: transparent; border: none; color: white; outline: none; width: 120px;">
           <span style="background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; font-size: 10px; color: var(--admin-muted);">⌘K</span>
