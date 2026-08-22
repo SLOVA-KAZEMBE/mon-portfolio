@@ -367,15 +367,54 @@ ul {
     top: 0;
     left: 0;
     height: 100dvh;
-    width: 260px;
+    width: min(250px, 84vw);
     z-index: 1000;
     display: none;
     box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+    overflow: hidden;
   }
 
   /* Sidebar visible quand checkbox cochee */
   .mobile-toggle-checkbox:checked ~ .sidebar {
     display: flex;
+  }
+
+  .sidebar-header {
+    padding: 14px 16px 12px;
+    gap: 10px;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-menu {
+    padding: 8px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .menu-group {
+    margin-bottom: 10px;
+  }
+
+  .menu-label {
+    margin-bottom: 4px;
+    padding-left: 10px;
+    font-size: 10px;
+  }
+
+  .menu-item {
+    padding: 8px 10px;
+    margin-bottom: 2px;
+    border-radius: 7px;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .menu-item i {
+    width: 16px;
+    margin-right: 9px;
+    font-size: 14px;
+    text-align: center;
   }
 
   /* Overlay visible quand sidebar ouverte */
@@ -435,13 +474,13 @@ ul {
 
   .content-area {
     width: 100%;
-    max-width: min(760px, calc(100vw - 24px));
+    max-width: min(560px, calc(100vw - 24px));
     margin: 0 auto;
     padding: 16px;
   }
 
   .stats-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns: 1fr !important;
     gap: 12px;
     margin-bottom: 20px;
   }
@@ -476,6 +515,7 @@ ul {
     min-width: 0;
     padding: 16px !important;
     gap: 12px !important;
+    border-radius: 10px;
   }
 
   .stat-icon {
@@ -520,7 +560,7 @@ ul {
 
 @media (max-width: 700px) {
   .content-area {
-    max-width: min(460px, calc(100vw - 20px));
+    max-width: min(430px, calc(100vw - 20px));
     padding: 12px 0 20px;
   }
 
@@ -532,10 +572,20 @@ ul {
   .stat-card {
     flex-direction: row !important;
     align-items: center !important;
+    justify-content: space-between;
+  }
+
+  .stat-card > div:first-child {
+    min-width: 0;
+  }
+
+  .stat-card svg {
+    max-width: 48px;
   }
 
   .card {
     overflow: visible;
+    border-radius: 10px;
   }
 
   .card-header {
@@ -561,7 +611,7 @@ ul {
   .table tbody {
     display: grid;
     gap: 10px;
-    padding: 12px;
+    padding: 10px;
   }
 
   .table tr {
@@ -569,7 +619,7 @@ ul {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--admin-border);
     border-radius: 10px;
-    padding: 12px;
+    padding: 11px;
   }
 
   .table td {

@@ -2,14 +2,19 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion - Admin DevFolio</title>
   <link rel="stylesheet" href="{{ image_url('css/admin.css') }}">
   <style>
-    body { display: flex; align-items: center; justify-content: center; background-color: var(--admin-bg); }
-    .login-card { background: var(--admin-card); border: 1px solid var(--admin-border); padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    body { display: grid; place-items: center; min-height: 100dvh; height: auto; padding: 20px; overflow: auto; background-color: var(--admin-bg); }
+    .login-card { background: var(--admin-card); border: 1px solid var(--admin-border); padding: 40px; border-radius: 12px; width: min(100%, 400px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
     .login-header { text-align: center; margin-bottom: 30px; }
     .login-header span { color: var(--admin-accent); font-weight: 800; font-size: 24px; }
     .login-header h1 { font-size: 20px; margin: 10px 0 0; }
+    @media (max-width: 480px) {
+      body { padding: 14px; }
+      .login-card { padding: 28px 20px; border-radius: 10px; }
+    }
   </style>
 </head>
 <body>
