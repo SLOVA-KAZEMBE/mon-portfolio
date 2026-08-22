@@ -25,6 +25,10 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -342,9 +346,10 @@ ul {
   cursor: pointer;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
 
   body {
+    display: block;
     overflow: auto;
     height: auto;
   }
@@ -364,18 +369,13 @@ ul {
     height: 100dvh;
     width: 260px;
     z-index: 1000;
-    transform: translateX(-110%);
-    visibility: hidden;
-    pointer-events: none;
-    transition: transform 0.25s ease, visibility 0.25s ease;
+    display: none;
     box-shadow: 4px 0 24px rgba(0,0,0,0.4);
   }
 
   /* Sidebar visible quand checkbox cochee */
   .mobile-toggle-checkbox:checked ~ .sidebar {
-    transform: translateX(0);
-    visibility: visible;
-    pointer-events: auto;
+    display: flex;
   }
 
   /* Overlay visible quand sidebar ouverte */
@@ -386,6 +386,8 @@ ul {
   /* Main content prend toute la largeur */
   .main-content {
     width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
     min-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
