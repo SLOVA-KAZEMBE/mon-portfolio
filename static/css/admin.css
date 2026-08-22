@@ -22,6 +22,7 @@ body {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  overflow-x: hidden;
 }
 
 a {
@@ -359,17 +360,22 @@ ul {
   .sidebar {
     position: fixed;
     top: 0;
-    left: -280px;
+    left: 0;
     height: 100dvh;
     width: 260px;
     z-index: 1000;
-    transition: left 0.25s ease;
+    transform: translateX(-110%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.25s ease, visibility 0.25s ease;
     box-shadow: 4px 0 24px rgba(0,0,0,0.4);
   }
 
   /* Sidebar visible quand checkbox cochee */
   .mobile-toggle-checkbox:checked ~ .sidebar {
-    left: 0;
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
   }
 
   /* Overlay visible quand sidebar ouverte */

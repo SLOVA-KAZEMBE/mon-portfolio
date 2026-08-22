@@ -8,23 +8,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const iconMenu = navToggle.querySelector('.icon-menu');
     const iconClose = navToggle.querySelector('.icon-close');
 
-    const toggleMenu = () => {
-      const isOpen = navLinks.classList.toggle('is-open');
+    const setMenuState = (isOpen) => {
+      navLinks.classList.toggle('is-open', isOpen);
+      document.body.classList.toggle('nav-open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      navToggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
       if (iconMenu && iconClose) {
         iconMenu.style.display = isOpen ? 'none' : 'block';
         iconClose.style.display = isOpen ? 'block' : 'none';
       }
     };
 
-    navToggle.addEventListener('click', toggleMenu);
+    navToggle.addEventListener('click', () => {
+      setMenuState(!navLinks.classList.contains('is-open'));
+    });
 
     // Ferme le menu mobile après un clic sur un lien
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         if (navLinks.classList.contains('is-open')) {
-          toggleMenu();
+          setMenuState(false);
         }
       });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!navLinks.classList.contains('is-open')) return;
+      if (navLinks.contains(event.target) || navToggle.contains(event.target)) return;
+      setMenuState(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && navLinks.classList.contains('is-open')) {
+        setMenuState(false);
+      }
     });
   }
 
