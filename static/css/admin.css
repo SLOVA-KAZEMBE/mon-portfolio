@@ -394,19 +394,25 @@ ul {
   }
 
   .topbar {
-    padding: 0 16px;
+    width: 100%;
+    min-height: 64px;
+    height: auto;
+    padding: 12px 16px;
     position: sticky;
     top: 0;
     z-index: 100;
     background-color: var(--admin-bg);
+    gap: 12px;
   }
 
   .topbar-title {
     font-size: 16px;
+    line-height: 1.25;
   }
 
   .topbar-actions {
     gap: 8px;
+    flex-shrink: 0;
   }
 
   /* Cacher la barre de recherche sur mobile */
@@ -414,19 +420,74 @@ ul {
     display: none !important;
   }
 
-  /* Cacher le nom utilisateur dans le topbar */
-  .topbar-actions .user-info {
-    display: none;
+  .topbar-actions > a[style*="moon"],
+  .topbar-actions > div:last-child {
+    display: none !important;
   }
 
   .content-area {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
     padding: 16px;
   }
 
   .stats-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 12px;
     margin-bottom: 20px;
+  }
+
+  .content-area > div:first-child[style*="justify-content: flex-end"] {
+    justify-content: stretch !important;
+    margin-bottom: 16px !important;
+  }
+
+  .content-area > div:first-child[style*="justify-content: flex-end"] .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .content-area [style*="grid-template-columns"]:not(.stats-grid) {
+    grid-template-columns: 1fr !important;
+  }
+
+  .content-area [style*="max-width"] {
+    max-width: 100% !important;
+  }
+
+  .content-area [style*="padding: 24px"] {
+    padding: 16px !important;
+  }
+
+  .content-area [style*="margin-top: 24px"] {
+    margin-top: 16px !important;
+  }
+
+  .stat-card {
+    min-width: 0;
+    padding: 16px !important;
+    gap: 12px !important;
+  }
+
+  .stat-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+
+  .card {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .card-header {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .card-header h2 {
+    font-size: 15px;
   }
 
   /* Tables defilables horizontalement */
@@ -435,7 +496,12 @@ ul {
   }
 
   .table {
-    min-width: 600px;
+    min-width: 560px;
+  }
+
+  .table th,
+  .table td {
+    padding: 12px 14px;
   }
 
   /* Formulaires full width */
@@ -446,10 +512,22 @@ ul {
 
 @media (max-width: 480px) {
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .topbar-actions > a {
     margin-right: 4px !important;
+  }
+
+  .topbar {
+    padding: 10px 12px;
+  }
+
+  .content-area {
+    padding: 12px;
+  }
+
+  .table {
+    min-width: 520px;
   }
 }
