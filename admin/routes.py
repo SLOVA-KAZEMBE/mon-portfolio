@@ -141,6 +141,10 @@ def add_project():
         
         image_file = request.files.get('image')
         image_path = upload_file(image_file, current_app.root_path)
+        if not image_path:
+            url_field = request.form.get('image_url_input', '').strip()
+            if url_field and url_field.startswith('http'):
+                image_path = url_field
 
         project = Project(title=title, category=category, description=description, tags=tags, status=status, color=color, image=image_path, link=link)
         db.session.add(project)
@@ -166,6 +170,10 @@ def edit_project(id):
         new_image_path = upload_file(image_file, current_app.root_path)
         if new_image_path:
             project.image = new_image_path
+        else:
+            url_field = request.form.get('image_url_input', '').strip()
+            if url_field and url_field.startswith('http'):
+                project.image = url_field
             
         db.session.commit()
         flash('Projet modifié avec succès', 'success')

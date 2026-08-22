@@ -736,12 +736,13 @@ img { max-width: 100%; display: block; }
   .nav-links.is-open { display: flex; }
   .nav-toggle { display: flex; }
   .hero__title { font-size: 34px; }
-  .hero__portrait { width: 220px; height: 240px; margin: 0 auto; }
+  .hero__portrait { width: 280px; height: 300px; margin: 0 auto; }
   .floating-badge { width: 38px; height: 38px; font-size: 13px; }
   .floating-badge--1 { left: -2%; }
   .floating-badge--3 { left: -4%; }
   .floating-badge--2, .floating-badge--4 { right: -2%; }
-  .code-card { left: 0; width: 200px; }
+  .code-card { left: -10px; width: 170px; padding: 10px; bottom: -15px; }
+  .code-card__body { font-size: 9.5px; }
   .stats { grid-template-columns: 1fr; }
   .project-grid { grid-template-columns: 1fr; }
   .services-grid { grid-template-columns: 1fr; }
