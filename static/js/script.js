@@ -3,13 +3,28 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------------- Menu mobile ---------------- */
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
+  
   if (navToggle && navLinks) {
-    navToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('is-open');
-    });
+    const iconMenu = navToggle.querySelector('.icon-menu');
+    const iconClose = navToggle.querySelector('.icon-close');
+
+    const toggleMenu = () => {
+      const isOpen = navLinks.classList.toggle('is-open');
+      if (iconMenu && iconClose) {
+        iconMenu.style.display = isOpen ? 'none' : 'block';
+        iconClose.style.display = isOpen ? 'block' : 'none';
+      }
+    };
+
+    navToggle.addEventListener('click', toggleMenu);
+
     // Ferme le menu mobile après un clic sur un lien
     navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => navLinks.classList.remove('is-open'));
+      link.addEventListener('click', () => {
+        if (navLinks.classList.contains('is-open')) {
+          toggleMenu();
+        }
+      });
     });
   }
 
