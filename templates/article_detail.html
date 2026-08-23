@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ article.title }} - {{ profile.name }}</title>
+    <meta name="description" content="{{ article.content[:155] }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" sizes="any">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="navbar__inner">
+        <a href="{{ url_for('index') }}#accueil" class="brand">
+          <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo" class="brand__logo" width="40" height="40" decoding="async">
+          {{ profile.name }}
+        </a>
+        <nav class="nav-links is-static">
+          <a href="{{ url_for('public_articles') }}" class="nav-link">Articles</a>
+          <a href="{{ url_for('index') }}#contact" class="nav-link">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <article class="section article-detail">
+        <a href="{{ url_for('public_articles') }}" class="btn btn--outline">Retour aux articles</a>
+        {% if article.image %}
+        <div class="article-detail__image">
+          <img src="{{ image_url(article.image) }}" alt="{{ article.title }}" loading="lazy" decoding="async">
+        </div>
+        {% endif %}
+        {% if article.category %}
+        <span class="eyebrow">{{ article.category }}</span>
+        {% endif %}
+        <h1 class="section__title">{{ article.title }}</h1>
+        <div class="article-detail__content">
+          {% for paragraph in article.content.split('\n') %}
+            {% if paragraph.strip() %}
+            <p>{{ paragraph }}</p>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </article>
+    </main>
+  </body>
+</html>

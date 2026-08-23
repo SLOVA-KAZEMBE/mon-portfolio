@@ -94,6 +94,16 @@ ul {
   color: #fff;
 }
 
+.menu-item.is-disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.menu-item.is-disabled:hover {
+  background-color: transparent;
+  color: var(--admin-muted);
+}
+
 .menu-item.active {
   background-color: var(--admin-accent);
 }
@@ -295,6 +305,20 @@ ul {
 .form-control:focus {
   outline: none;
   border-color: var(--admin-accent);
+}
+
+.image-preview {
+  display: none;
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  margin-top: 10px;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+}
+
+.image-preview.is-visible {
+  display: block;
 }
 
 .alert {
@@ -627,6 +651,21 @@ ul {
     width: 100%;
     padding: 7px 0 !important;
     border-bottom: 0;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 3px;
+    color: var(--admin-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .table td:not([data-label])::before {
+    content: none;
   }
 
   .table td:first-child {

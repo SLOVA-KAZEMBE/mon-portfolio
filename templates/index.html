@@ -5,10 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ profile.name }} — {{ profile.role }}</title>
+    <meta name="description" content="{{ profile.tagline or 'Portfolio de développeur web front-end.' }}">
+    <meta property="og:title" content="{{ profile.name }} — {{ profile.role }}">
+    <meta property="og:description" content="{{ profile.tagline or 'Portfolio de développeur web front-end.' }}">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ image_url(profile.hero_photo) }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" sizes="any">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
 
   <body>
@@ -16,7 +23,7 @@
     <header class="navbar">
       <div class="navbar__inner">
         <a href="#accueil" class="brand">
-          <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo" class="brand__logo">
+          <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo" class="brand__logo" width="40" height="40" decoding="async">
           {{ profile.name }}
         </a>
 
@@ -28,8 +35,14 @@
           <a href="#projets" class="nav-link" data-section="projets">Projets</a>
           <a href="#competences" class="nav-link" data-section="competences">Compétences</a>
           <a href="#experience" class="nav-link" data-section="experience">Expérience</a>
+          {% if articles %}
+          <a href="#articles" class="nav-link" data-section="articles">Articles</a>
+          {% endif %}
           <a href="#contact" class="nav-link" data-section="contact">Contact</a>
-          <a href="{{ cv_href }}" target="_blank" rel="noopener noreferrer" class="nav-link nav-link--cv"><i class="fa-solid fa-download"></i> Voir mon CV</a>
+          <a href="{{ cv_href }}" target="_blank" rel="noopener noreferrer" class="nav-link nav-link--cv">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+            Voir mon CV
+          </a>
         </nav>
 
         <div class="navbar__actions">
@@ -95,7 +108,7 @@
             <div class="hero__portrait">
               <div class="hero__portrait-glow"></div>
               <div class="hero__portrait-frame">
-                <img src="{{ image_url(profile.hero_photo) }}" alt="Photo de {{ profile.name }}" class="hero__photo">
+                <img src="{{ image_url(profile.hero_photo) }}" alt="Photo de {{ profile.name }}" class="hero__photo" width="600" height="640" fetchpriority="high" decoding="async">
               </div>
               {% for badge in tech_badges %}
               <span class="floating-badge floating-badge--{{ loop.index }}"
@@ -145,7 +158,7 @@
             <div class="about__portrait">
               <div class="about__portrait-glow"></div>
               <div class="about__portrait-frame">
-                <img src="{{ image_url(profile.about_photo) }}" alt="Photo de {{ profile.name }}" class="about__photo">
+                <img src="{{ image_url(profile.about_photo) }}" alt="Photo de {{ profile.name }}" class="about__photo" width="680" height="816" loading="lazy" decoding="async">
               </div>
             </div>
             <div class="about__status-card">
@@ -243,17 +256,14 @@
         <div class="skills__grid">
           <div class="panel">
             <h3 class="panel__title">Compétences techniques</h3>
+            <div class="tech-logo-grid">
             {% for s in tech_skills %}
-            <div class="skill-bar">
-              <div class="skill-bar__head">
-                <span>{{ s.name }}</span>
-                <span class="muted">{{ s.level }}%</span>
-              </div>
-              <div class="skill-bar__track">
-                <div class="skill-bar__fill" style="width: {{ s.level }}%;"></div>
-              </div>
+            <div class="tech-logo tech-logo--{{ s.class }}" title="{{ s.label }}">
+              <span class="tech-logo__mark">{{ s.short }}</span>
+              <span class="tech-logo__name">{{ s.label }}</span>
             </div>
             {% endfor %}
+            </div>
           </div>
 
           <div class="panel">
@@ -311,6 +321,35 @@
           {% endfor %}
         </div>
       </section>
+
+      <!-- ===================== ARTICLES ===================== -->
+      {% if articles %}
+      <section class="section" id="articles">
+        <span class="eyebrow">Blog</span>
+        <h2 class="section__title">Articles récents</h2>
+        <p class="section__subtitle">Quelques notes et idées publiées récemment.</p>
+
+        <div class="project-grid">
+          {% for article in articles %}
+          <a href="{{ url_for('public_article', article_id=article.id) }}" class="article-card-link">
+            <article class="project-card">
+              <div class="project-card__thumb thumb--2" {% if article.image %}style="background-image: url('{{ image_url(article.image) }}'); background-size: cover; background-position: center;"{% endif %}></div>
+              <div class="project-card__body">
+                <h3>{{ article.title }}</h3>
+                <p>{{ article.content[:120] }}{% if article.content|length > 120 %}...{% endif %}</p>
+                {% if article.category %}
+                <div class="tag-row"><span class="tag">{{ article.category }}</span></div>
+                {% endif %}
+              </div>
+            </article>
+          </a>
+          {% endfor %}
+        </div>
+        <div style="margin-top: 24px;">
+          <a href="{{ url_for('public_articles') }}" class="btn btn--outline">Voir tous les articles</a>
+        </div>
+      </section>
+      {% endif %}
 
       <!-- ===================== CONTACT ===================== -->
       <section class="section" id="contact">
@@ -379,6 +418,10 @@
 
           <form class="contact-form" method="post" action="{{ url_for('contact') }}">
             <div class="form-row">
+              <label class="honeypot" for="website">Site web</label>
+              <input class="honeypot" type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+            <div class="form-row">
               <label for="name">Nom</label>
               <input type="text" id="name" name="name" placeholder="Votre nom" required>
             </div>
@@ -407,17 +450,17 @@
       <div class="site-footer__inner">
         <p>&copy; 2026 {{ profile.first_name }}Folio. Tous droits réservés.</p>
         <div class="footer-links">
-          <a href="#">Mentions légales</a>
-          <a href="#">Politique de confidentialité</a>
+          <a href="#contact">Mentions légales</a>
+          <a href="#contact">Politique de confidentialité</a>
         </div>
       </div>
     </footer>
 
     {% set clean_phone = (profile.phone or '') | replace(' ', '') | replace('+', '') | replace('-', '') | replace('(', '') | replace(')', '') %}
     <a href="{% if clean_phone %}https://wa.me/{{ clean_phone }}{% else %}#contact{% endif %}" {% if clean_phone %}target="_blank" rel="noopener noreferrer"{% endif %} class="whatsapp-float" aria-label="Contact WhatsApp">
-      <i class="fa-brands fa-whatsapp"></i>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20.5l1.4-4.1A8.7 8.7 0 1 1 7.5 19L3 20.5z"/><path d="M9.2 8.8c.2-.5.4-.5.7-.5h.5c.2 0 .4.1.5.4l.7 1.6c.1.3.1.5-.1.7l-.4.5c-.1.1-.2.3 0 .5.5.9 1.2 1.6 2.2 2.1.2.1.4.1.5-.1l.6-.7c.2-.2.4-.2.7-.1l1.5.7c.3.1.4.3.4.6 0 .6-.5 1.4-1.1 1.6-1 .3-2.9-.2-4.6-1.6-1.7-1.4-2.9-3.2-3-4.4 0-.5.2-1 .4-1.3z"/></svg>
     </a>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
   </body>
 </html>

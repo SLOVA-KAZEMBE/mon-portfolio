@@ -21,6 +21,16 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def looks_like_image(file_bytes):
+    signatures = (
+        b'\xff\xd8\xff',      # jpeg
+        b'\x89PNG\r\n\x1a\n', # png
+        b'GIF87a',
+        b'GIF89a',
+        b'RIFF',              # webp starts with RIFF....WEBP
+    )
+    return file_bytes.startswith(signatures) and (not file_bytes.startswith(b'RIFF') or file_bytes[8:12] == b'WEBP')
+
 def upload_file(image_file, root_path):
     """Upload une image et retourne son URL ou chemin relatif."""
     # Aucun fichier soumis ou fichier vide
@@ -40,6 +50,9 @@ def upload_file(image_file, root_path):
             # Vérifier que le fichier n'est pas vide
             if not file_bytes:
                 print("Fichier vide reçu, upload annulé.")
+                return None
+            if not looks_like_image(file_bytes):
+                print("Le fichier reçu ne semble pas être une image valide.")
                 return None
 
             # Upload dans le bucket 'portfolio' avec upsert pour éviter conflit
@@ -69,9 +82,14 @@ def upload_file(image_file, root_path):
     else:
         # Mode local sans Supabase
         try:
+            file_bytes = image_file.read()
+            if not file_bytes or not looks_like_image(file_bytes):
+                print("Upload local annulé: image invalide.")
+                return None
             upload_folder = os.path.join(root_path, 'static', 'img', 'uploads')
             os.makedirs(upload_folder, exist_ok=True)
-            image_file.save(os.path.join(upload_folder, unique_filename))
+            with open(os.path.join(upload_folder, unique_filename), 'wb') as f_out:
+                f_out.write(file_bytes)
             return f'img/uploads/{unique_filename}'
         except Exception as e:
             print(f"Erreur upload local: {e}")
@@ -108,18 +126,22 @@ def logout():
 @admin_bp.route('/dashboard')
 @login_required
 def dashboard():
-    projects_count = Project.query.count()
+    projects_count = Project.query.filter_by(status='Publié').count()
     skills_count = Skill.query.count()
     new_messages = Message.query.filter_by(is_read=False).count()
+    articles_count = Article.query.filter_by(status='Publié').count()
     recent_projects = Project.query.order_by(Project.created_at.desc()).limit(5).all()
     recent_messages = Message.query.order_by(Message.created_at.desc()).limit(4).all()
+    recent_articles = Article.query.order_by(Article.created_at.desc()).limit(3).all()
     
     return render_template('admin/dashboard.html', 
                            projects_count=projects_count,
                            skills_count=skills_count,
                            new_messages=new_messages,
+                           articles_count=articles_count,
                            recent_projects=recent_projects,
-                           recent_messages=recent_messages)
+                           recent_messages=recent_messages,
+                           recent_articles=recent_articles)
 
 @admin_bp.route('/projects')
 @login_required

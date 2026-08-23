@@ -22,8 +22,8 @@
     <tbody>
       {% for article in articles %}
       <tr>
-        <td style="color: var(--admin-muted);">#{{ article.id }}</td>
-        <td>
+        <td data-label="ID" style="color: var(--admin-muted);">#{{ article.id }}</td>
+        <td data-label="Titre">
           <div style="display: flex; align-items: center; gap: 12px;">
             {% if article.image %}
             <img src="{{ image_url(article.image) }}" style="width: 48px; height: 32px; border-radius: 4px; object-fit: cover;">
@@ -33,13 +33,13 @@
             <div style="font-weight: 500;">{{ article.title }}</div>
           </div>
         </td>
-        <td><span style="background: rgba(139, 92, 246, 0.1); color: var(--admin-accent); padding: 2px 8px; border-radius: 12px; font-size: 11px;">{{ article.category }}</span></td>
-        <td>
+        <td data-label="Catégorie"><span style="background: rgba(139, 92, 246, 0.1); color: var(--admin-accent); padding: 2px 8px; border-radius: 12px; font-size: 11px;">{{ article.category }}</span></td>
+        <td data-label="Statut">
           <span class="status-dot {% if article.status == 'Publié' %}success{% else %}warning{% endif %}"></span>
           <span style="font-size: 13px;">{{ article.status }}</span>
         </td>
-        <td style="font-size: 12px; color: var(--admin-muted);">{{ article.created_at.strftime('%Y-%m-%d') if article.created_at else '' }}</td>
-        <td>
+        <td data-label="Date" style="font-size: 12px; color: var(--admin-muted);">{{ article.created_at.strftime('%Y-%m-%d') if article.created_at else '' }}</td>
+        <td data-label="Actions">
           <div style="display: flex; gap: 8px;">
             <a href="{{ url_for('admin.edit_article', id=article.id) }}" class="btn" style="padding: 6px 10px; border: 1px solid var(--admin-border);"><i class="fa-solid fa-pen"></i></a>
             <form action="{{ url_for('admin.delete_article', id=article.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ceci ?');">

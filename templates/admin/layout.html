@@ -35,9 +35,9 @@
         </a>
         <a href="{{ url_for('admin.experiences') }}" class="menu-item {% if 'experiences' in request.endpoint %}active{% endif %}"><i class="fa-solid fa-briefcase"></i> Expériences</a>
         <a href="{{ url_for('admin.articles') }}" class="menu-item {% if 'articles' in request.endpoint %}active{% endif %}"><i class="fa-regular fa-newspaper"></i> Articles / Phrases</a>
-        <a href="#" class="menu-item"><i class="fa-regular fa-comment-dots"></i> Témoignages</a>
+        <span class="menu-item is-disabled"><i class="fa-regular fa-comment-dots"></i> Témoignages</span>
         <a href="{{ url_for('admin.services') }}" class="menu-item {% if 'services' in request.endpoint %}active{% endif %}"><i class="fa-solid fa-concierge-bell"></i> Services</a>
-        <a href="#" class="menu-item"><i class="fa-solid fa-certificate"></i> Certifications</a>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-certificate"></i> Certifications</span>
       </div>
       <div class="menu-group">
         <div class="menu-label">GESTION</div>
@@ -45,23 +45,23 @@
           <i class="fa-regular fa-envelope"></i> Messages
           {% if unread_messages > 0 %}<span class="menu-badge">{{ unread_messages }}</span>{% endif %}
         </a>
-        <a href="#" class="menu-item"><i class="fa-solid fa-users"></i> Abonnés</a>
-        <a href="#" class="menu-item"><i class="fa-solid fa-handshake"></i> Partenaires</a>
-        <a href="#" class="menu-item"><i class="fa-regular fa-images"></i> Fichiers / Médias</a>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-users"></i> Abonnés</span>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-handshake"></i> Partenaires</span>
+        <span class="menu-item is-disabled"><i class="fa-regular fa-images"></i> Fichiers / Médias</span>
       </div>
       <div class="menu-group">
         <div class="menu-label">APPARENCE</div>
-        <a href="#" class="menu-item"><i class="fa-solid fa-paint-roller"></i> Thèmes</a>
-        <a href="#" class="menu-item"><i class="fa-solid fa-sliders"></i> Personnalisation</a>
-        <a href="#" class="menu-item"><i class="fa-solid fa-bars"></i> Menus</a>
-        <a href="#" class="menu-item"><i class="fa-regular fa-file-lines"></i> Pages</a>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-paint-roller"></i> Thèmes</span>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-sliders"></i> Personnalisation</span>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-bars"></i> Menus</span>
+        <span class="menu-item is-disabled"><i class="fa-regular fa-file-lines"></i> Pages</span>
       </div>
       <div class="menu-group">
         <div class="menu-label">PARAMÈTRES</div>
-        <a href="#" class="menu-item"><i class="fa-solid fa-gear"></i> Général</a>
-        <a href="#" class="menu-item"><i class="fa-solid fa-magnifying-glass"></i> SEO</a>
-        <a href="#" class="menu-item"><i class="fa-solid fa-share-nodes"></i> Réseaux sociaux</a>
-        <a href="#" class="menu-item"><i class="fa-solid fa-user-shield"></i> Utilisateurs</a>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-gear"></i> Général</span>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-magnifying-glass"></i> SEO</span>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-share-nodes"></i> Réseaux sociaux</span>
+        <span class="menu-item is-disabled"><i class="fa-solid fa-user-shield"></i> Utilisateurs</span>
       </div>
     </div>
     <div style="padding: 24px; border-top: 1px solid var(--admin-border);">
@@ -99,9 +99,9 @@
           <i class="fa-regular fa-bell" style="font-size: 18px;"></i>
           {% if unread_messages > 0 %}<span style="position: absolute; top: -5px; right: -5px; background: var(--admin-accent); color: white; border-radius: 50%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-weight: bold;">{{ unread_messages }}</span>{% endif %}
         </a>
-        <a href="#" style="color: var(--admin-text); margin-right: 24px;">
+        <span style="color: var(--admin-text); margin-right: 24px;">
           <i class="fa-regular fa-moon" style="font-size: 18px;"></i>
-        </a>
+        </span>
         <div style="display: flex; align-items: center; gap: 10px; border-left: 1px solid var(--admin-border); padding-left: 24px;">
           <img src="https://ui-avatars.com/api/?name=Slova+Kazembe&background=232736&color=fff" style="width: 32px; border-radius: 50%;">
           <div style="font-size: 13px; line-height: 1.2;">
@@ -125,5 +125,24 @@
       {% block content %}{% endblock %}
     </div>
   </main>
+  <script>
+    document.querySelectorAll('input[type="file"][accept*="image"]').forEach((input) => {
+      const preview = document.createElement('img');
+      preview.className = 'image-preview';
+      preview.alt = 'Aperçu de l’image sélectionnée';
+      input.insertAdjacentElement('afterend', preview);
+
+      input.addEventListener('change', () => {
+        const file = input.files && input.files[0];
+        if (!file) {
+          preview.removeAttribute('src');
+          preview.classList.remove('is-visible');
+          return;
+        }
+        preview.src = URL.createObjectURL(file);
+        preview.classList.add('is-visible');
+      });
+    });
+  </script>
 </body>
 </html>

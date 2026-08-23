@@ -22,8 +22,8 @@
     <tbody>
       {% for project in projects %}
       <tr>
-        <td style="color: var(--admin-muted);">#{{ project.id }}</td>
-        <td>
+        <td data-label="ID" style="color: var(--admin-muted);">#{{ project.id }}</td>
+        <td data-label="Projet">
           <div style="display: flex; align-items: center; gap: 12px;">
             {% if project.image %}
             <img src="{{ image_url(project.image) }}" style="width: 48px; height: 32px; border-radius: 4px; object-fit: cover;">
@@ -33,13 +33,13 @@
             <div style="font-weight: 500;">{{ project.title }}</div>
           </div>
         </td>
-        <td><span style="background: rgba(139, 92, 246, 0.1); color: var(--admin-accent); padding: 2px 8px; border-radius: 12px; font-size: 11px;">{{ project.category }}</span></td>
-        <td style="font-size: 12px; color: var(--admin-muted);">{{ project.tags }}</td>
-        <td>
+        <td data-label="Catégorie"><span style="background: rgba(139, 92, 246, 0.1); color: var(--admin-accent); padding: 2px 8px; border-radius: 12px; font-size: 11px;">{{ project.category }}</span></td>
+        <td data-label="Tags" style="font-size: 12px; color: var(--admin-muted);">{{ project.tags }}</td>
+        <td data-label="Statut">
           <span class="status-dot {% if project.status == 'Publié' %}success{% else %}warning{% endif %}"></span>
           <span style="font-size: 13px;">{{ project.status }}</span>
         </td>
-        <td>
+        <td data-label="Actions">
           <div style="display: flex; gap: 8px;">
             <a href="{{ url_for('admin.edit_project', id=project.id) }}" class="btn" style="padding: 6px 10px; border: 1px solid var(--admin-border);"><i class="fa-solid fa-pen"></i></a>
             <form action="{{ url_for('admin.delete_project', id=project.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">

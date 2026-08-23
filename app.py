@@ -1,4 +1,5 @@
 import os
+import re
 from urllib.parse import quote_plus
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
@@ -58,6 +59,28 @@ TECH_BADGES = [
     {"label": "TypeScript", "short": "TS", "color": "#3178c6"},
     {"label": "Tailwind CSS", "short": "〜", "color": "#0d1117", "border": "#38bdf8", "text_color": "#38bdf8"},
 ]
+
+TECH_LOGOS = {
+    "html": {"label": "HTML5", "short": "HTML", "class": "html"},
+    "html5": {"label": "HTML5", "short": "HTML", "class": "html"},
+    "css": {"label": "CSS3", "short": "CSS", "class": "css"},
+    "css3": {"label": "CSS3", "short": "CSS", "class": "css"},
+    "javascript": {"label": "JavaScript", "short": "JS", "class": "js"},
+    "js": {"label": "JavaScript", "short": "JS", "class": "js"},
+    "react": {"label": "React", "short": "⚛", "class": "react"},
+    "react.js": {"label": "React", "short": "⚛", "class": "react"},
+    "typescript": {"label": "TypeScript", "short": "TS", "class": "ts"},
+    "tailwind": {"label": "Tailwind CSS", "short": "TW", "class": "tailwind"},
+    "tailwind css": {"label": "Tailwind CSS", "short": "TW", "class": "tailwind"},
+    "flask": {"label": "Flask", "short": "Fl", "class": "flask"},
+    "python": {"label": "Python", "short": "Py", "class": "python"},
+}
+
+
+def skill_logo(skill):
+    key = skill.name.strip().lower()
+    logo = TECH_LOGOS.get(key, {"label": skill.name, "short": skill.name[:2].upper(), "class": "default"})
+    return {"name": skill.name, **logo}
 
 @app.context_processor
 def utility_processor():
@@ -162,11 +185,13 @@ def inject_globals():
 
 @app.route("/")
 def index():
-    projects_db = Project.query.order_by(Project.created_at.desc()).all()
+    projects_db = Project.query.filter_by(status='Publié').order_by(Project.created_at.desc()).all()
     tech_skills_db = Skill.query.filter_by(type='tech').all()
+    tech_skill_cards = [skill_logo(skill) for skill in tech_skills_db]
     tools_skills_db = Skill.query.filter_by(type='tool').all()
     services_db = Service.query.order_by(Service.id.asc()).all()
     experience_db = Experience.query.order_by(Experience.id.asc()).all()
+    articles_db = Article.query.filter_by(status='Publié').order_by(Article.created_at.desc()).limit(3).all()
     
     categories = ["Tous"]
     for p in projects_db:
@@ -177,23 +202,41 @@ def index():
         "index.html",
         categories=categories,
         projects=projects_db,
-        tech_skills=tech_skills_db,
+        tech_skills=tech_skill_cards,
         tools=[t.name for t in tools_skills_db],
         services=services_db,
         experience=experience_db,
         tech_badges=TECH_BADGES,
+        articles=articles_db,
     )
+
+
+@app.route("/articles")
+def public_articles():
+    articles_db = Article.query.filter_by(status='Publié').order_by(Article.created_at.desc()).all()
+    return render_template("articles.html", articles=articles_db)
+
+
+@app.route("/articles/<int:article_id>")
+def public_article(article_id):
+    article = Article.query.filter_by(id=article_id, status='Publié').first_or_404()
+    return render_template("article_detail.html", article=article)
 
 
 @app.route("/contact", methods=["POST"])
 def contact():
+    website = request.form.get("website", "").strip()
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()
     subject = request.form.get("subject", "").strip()
     message = request.form.get("message", "").strip()
 
-    if not name or not email or not message:
+    if website:
+        flash("Votre message a bien été envoyé. Merci !", "success")
+    elif not name or not email or not message:
         flash("Merci de remplir au moins le nom, l'email et le message.", "error")
+    elif not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email):
+        flash("Merci d'indiquer une adresse email valide.", "error")
     else:
         msg = Message(name=name, email=email, subject=subject, content=message)
         db.session.add(msg)
